@@ -1,0 +1,38 @@
+/run/initialize
+# Create a scene handler and viewer for HepRep
+#/vis/open HepRepFile
+# Create a new empty scene
+/vis/scene/create
+# Declare that the world volume
+/vis/scene/add/volume
+# Attach scene to scenehandler
+/vis/sceneHandler/attach
+# Execute the visualisation
+/vis/viewer/flush
+/vis/viewer/create
+# Add Trajectories
+#/vis/scene/add/trajectories
+#/vis/scene/add/hits
+#/tracking/storeTrajectory 1
+#/process/list
+/vis/open OGL 800+600
+#/vis/open OGLSQt
+/vis/viewer/zoom 10.
+#/vis/open DAWNFILE
+/vis/viewer/set/autoRefresh false
+#/vis/viewer/set/viewpointThetaPhi  90. 0.
+/vis/verbose warnings
+/vis/drawVolume
+/vis/viewer/set/style wireframe
+/vis/scene/add/trajectories smooth
+/vis/modeling/trajectories/create/drawByParticleID
+/vis/modeling/trajectories/drawByParticleID-0/set proton green
+/vis/modeling/trajectories/drawByParticleID-0/set C12[0.0] red
+/vis/modeling/trajectories/drawByParticleID-0/set gamma yellow
+/vis/filtering/trajectories/create/particleFilter
+/vis/filtering/trajectories/particleFilter-0/add gamma
+/vis/filtering/trajectories/particleFilter-0/add proton
+/vis/filtering/trajectories/particleFilter-0/add C12[0.0]
+/vis/scene/endOfEventAction accumulate
+# Run
+/run/beamOn 10
