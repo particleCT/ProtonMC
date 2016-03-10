@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 2.6 FATAL_ERROR)
 ############ Make your changes here ############
 
 set(name    ProtonMC)  # equivalent to "name := exampleN01" in G4 GNUmakefiles
-set(WITH_VIS true)
+set(WITH_VIS false)
 ############ What's below should not need to be changed ############
 
 # http://www.cmake.org/cmake/help/cmake_tutorial.html

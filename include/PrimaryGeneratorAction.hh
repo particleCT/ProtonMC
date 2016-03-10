@@ -35,19 +35,19 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
   static G4String GetPrimaryName() ;                
   static inline PrimaryGeneratorAction* GetInstance() { return theGenerator; }
 
-  std::vector<float>* tracks_X;
-  std::vector<float>* tracks_Y;
-  std::vector<float>* tracks_Z;
+  std::vector<double>* tracks_X;
+  std::vector<double>* tracks_Y;
+  std::vector<double>* tracks_Z;
 
   std::vector<G4double> beamPosZ;
   std::vector<G4double> beamPosY;
 
-  Float_t x0,y0,z0,px0,py0,pz0;
-  Float_t x1,y1,z1,px1,py1,pz1;
-  Float_t E0,Estop;
+  Double_t x0,y0,z0,px0,py0,pz0;
+  Double_t x1,y1,z1,px1,py1,pz1;
+  Double_t E0,Estop;
   Int_t   Id;
   G4int nProtonsGenerated;
-  Float_t x,y,z,theta,phi,Einit;
+  Double_t x,y,z,theta,phi,Einit;
   G4ThreeVector Position, Momentum;
 
   private:
