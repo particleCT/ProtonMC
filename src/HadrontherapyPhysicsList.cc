@@ -41,8 +41,8 @@
 HadrontherapyPhysicsList::HadrontherapyPhysicsList(G4String& parWorldName):G4VModularPhysicsList(),pWorldName(parWorldName)
 {
   G4LossTableManager::Instance();
-  defaultCutValue = 1.0*mm;
-  cutForGamma     = 1.0*mm;
+  defaultCutValue = 0.01*mm;
+  cutForGamma     = defaultCutValue;//1.0*mm;
   cutForElectron  = defaultCutValue;
   cutForPositron  = defaultCutValue;
 
@@ -53,8 +53,6 @@ HadrontherapyPhysicsList::HadrontherapyPhysicsList(G4String& parWorldName):G4VMo
   radioactiveDecayIsRegisted = false;
 
   stepMaxProcess  = 0;
-
-
   SetVerboseLevel(1);
 
   // EM physics
@@ -67,7 +65,6 @@ HadrontherapyPhysicsList::HadrontherapyPhysicsList(G4String& parWorldName):G4VMo
   AddPhysicsList("elastic");
   AddPhysicsList("binary");
   AddPhysicsList("qmd_ion_ion_inelastic");
-
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -260,7 +257,6 @@ void HadrontherapyPhysicsList::AddStepMax()
   while ((*theParticleIterator)()){
     G4ParticleDefinition* particle = theParticleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
-
     if (stepMaxProcess->IsApplicable(*particle) && pmanager)
       {
         pmanager ->AddDiscreteProcess(stepMaxProcess);

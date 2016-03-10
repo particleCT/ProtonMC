@@ -37,10 +37,10 @@ Analysis::Analysis(G4int thread, G4int angle,G4String theName){
   t->Branch("pz0",&pz0,"pz0/D");
   t->Branch("Einit",&Einit,"Einit/D");
   
-  /*t->Branch("tracks_X",&tracks_X);
+  t->Branch("tracks_X",&tracks_X);
   t->Branch("tracks_Y",&tracks_Y);
   t->Branch("tracks_Z",&tracks_Z);
-  t->Branch("mat_name",&mat_name);*/
+  t->Branch("mat_name",&mat_name);
 
   t->Branch("x1",&x1,"x1/D");
   t->Branch("y1",&y1,"y1/D");
@@ -55,39 +55,39 @@ Analysis::Analysis(G4int thread, G4int angle,G4String theName){
 }
 
 
-void Analysis::analyseHit(G4Step* aStep, G4String theName)
+void Analysis::RearFrontDetector(G4Step* aStep, G4String theName)
 {
   
   theSteppingAction = SteppingAction::GetInstance();
   f1->cd();
 
-  if(theName=="sd1"){
-    x0  = aStep->GetPostStepPoint()->GetPosition()[0];
-    y0  = aStep->GetPostStepPoint()->GetPosition()[1];
-    z0  = aStep->GetPostStepPoint()->GetPosition()[2];
+  if(theName=="FrontTracker"){
+    x0  = aStep->GetPreStepPoint()->GetPosition()[0];
+    y0  = aStep->GetPreStepPoint()->GetPosition()[1];
+    z0  = aStep->GetPreStepPoint()->GetPosition()[2];
 
-    px0 = aStep->GetPostStepPoint()->GetMomentumDirection()[0];
-    py0 = aStep->GetPostStepPoint()->GetMomentumDirection()[1];
-    pz0 = aStep->GetPostStepPoint()->GetMomentumDirection()[2];
-    Einit = aStep->GetPostStepPoint()->GetKineticEnergy();
+    px0 = aStep->GetPreStepPoint()->GetMomentumDirection()[0];
+    py0 = aStep->GetPreStepPoint()->GetMomentumDirection()[1];
+    pz0 = aStep->GetPreStepPoint()->GetMomentumDirection()[2];
+    Einit = aStep->GetPreStepPoint()->GetKineticEnergy();
 
-    /*theSteppingAction->temp_name.clear();
+    theSteppingAction->temp_name.clear(); // clear before starting
     theSteppingAction->temp_X.clear();
     theSteppingAction->temp_Y.clear();
-    theSteppingAction->temp_Z.clear();*/
+    theSteppingAction->temp_Z.clear();
 
   }
   
-  else if(theName=="sd2"){
-    x1  = aStep->GetPostStepPoint()->GetPosition()[0];
-    y1  = aStep->GetPostStepPoint()->GetPosition()[1];
-    z1  = aStep->GetPostStepPoint()->GetPosition()[2];
+  else if(theName=="RearTracker"){
+    x1  = aStep->GetPreStepPoint()->GetPosition()[0];
+    y1  = aStep->GetPreStepPoint()->GetPosition()[1];
+    z1  = aStep->GetPreStepPoint()->GetPosition()[2];
     
-    px1 = aStep->GetPostStepPoint()->GetMomentumDirection()[0];
-    py1 = aStep->GetPostStepPoint()->GetMomentumDirection()[1];
-    pz1 = aStep->GetPostStepPoint()->GetMomentumDirection()[2];
+    px1 = aStep->GetPreStepPoint()->GetMomentumDirection()[0];
+    py1 = aStep->GetPreStepPoint()->GetMomentumDirection()[1];
+    pz1 = aStep->GetPreStepPoint()->GetMomentumDirection()[2];
     
-    /*mat_name = &(theSteppingAction->temp_name);
+    mat_name = &(theSteppingAction->temp_name);
     tracks_X = &(theSteppingAction->temp_X);
     tracks_Y = &(theSteppingAction->temp_Y);
     tracks_Z = &(theSteppingAction->temp_Z);
@@ -95,24 +95,20 @@ void Analysis::analyseHit(G4Step* aStep, G4String theName)
     tracks_X->push_back(x1);
     tracks_Y->push_back(y1);
     tracks_Z->push_back(z1);
-    mat_name->push_back( aStep->GetPreStepPoint()->GetMaterial()->GetName().data() );*/
+    mat_name->push_back( aStep->GetPreStepPoint()->GetMaterial()->GetName().data() );
 
     Id    = aStep->GetTrack()->GetTrackID();
-    Estop = aStep->GetPostStepPoint()->GetKineticEnergy();
+    Estop = aStep->GetPreStepPoint()->GetKineticEnergy();
     Einit = theGenerator->ENER;
     t->Fill();
 
-    /*theSteppingAction->temp_name.clear();
+    theSteppingAction->temp_name.clear();
     theSteppingAction->temp_X.clear();
     theSteppingAction->temp_Y.clear();
-    theSteppingAction->temp_Z.clear();*/
+    theSteppingAction->temp_Z.clear();
 
   }
-
-
 }
-
-
 void Analysis::Save(){
   f1->cd();
   theGenerator = PrimaryGeneratorAction::GetInstance();

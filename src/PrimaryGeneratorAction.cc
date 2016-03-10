@@ -55,7 +55,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   Einit = ENER*MeV;
 
 
-  x0 = -1*theDetector->PhantomHalfX-10*mm; //Delta epsilon to hit all detectors
+  x0 = -1*theDetector->PhantomHalfX -1*mm; //Delta epsilon to hit all detectors
   y0 = G4UniformRand()*fieldSizeY-fieldSizeY/2;//G4RandGauss::shoot(0,8*mm);
   z0 = G4UniformRand()*fieldSizeZ-fieldSizeZ/2;//G4RandGauss::shoot(0,8*mm);
   px0 = 1; 

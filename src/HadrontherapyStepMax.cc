@@ -24,15 +24,13 @@ G4double HadrontherapyStepMax::PostStepGetPhysicalInteractionLength(const G4Trac
                                                   G4ForceCondition* condition )
 {
   // condition is set to "Not Forced"
-  *condition = NotForced;
-  
+  *condition = NotForced;  
   G4double ProposedStep = DBL_MAX;
-
   if((MaxChargedStep > 0.) &&
      (aTrack.GetVolume() != 0) &&
      (aTrack.GetVolume()->GetName() == "DetectorPhys"))
-     ProposedStep = MaxChargedStep;
-
+    ProposedStep = MaxChargedStep;
+  
   return ProposedStep;
 }
 

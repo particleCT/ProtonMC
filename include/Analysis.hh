@@ -17,7 +17,7 @@ public:
   Analysis(G4int,G4int,G4String);
   ~Analysis();
   static inline Analysis* GetInstance() { return theAnalysis; }
-  void analyseHit(G4Step*,G4String);
+  void RearFrontDetector(G4Step*,G4String);
   TTree  *t;
   TFile *f1;
   void Save();

@@ -43,8 +43,7 @@ DetectorConstruction::DetectorConstruction(G4String theModel,G4int angle,G4doubl
 
 G4VPhysicalVolume* DetectorConstruction::Construct()
 {
-
-  //water = theMaterial->water;
+  water = theMaterial->water;
   G4Material* air   = theMaterial->ConstructMaterial("Air",0.0001025); 
   G4double world_size       = 3*m;  
   G4double PhantomPositionX = 0*cm;
@@ -67,21 +66,21 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   rotTotal->rotateY(theAngle*pi/180.);
 
   // Detectors 
-  SensitiveDetector* sd1               = new SensitiveDetector("sd1");
+  SensitiveDetector* sd1               = new SensitiveDetector("FrontTracker"); // Front Tracker
   G4Box* rad_vol1                      = new G4Box("rad_vol1",1.0*mm,PhantomHalfY,PhantomHalfZ);
   G4LogicalVolume * rad_log1           = new G4LogicalVolume(rad_vol1,air,"rad_log1",0,0,0);
   G4VisAttributes* sd_att = new G4VisAttributes(G4Colour(0,1,1));
   sd_att->SetVisibility(true);
   rad_log1->SetVisAttributes(sd_att);
   rad_log1->SetSensitiveDetector(sd1);
-  new G4PVPlacement(0,G4ThreeVector(-1*theDetector->PhantomHalfX -1*mm,0,0),"rad_phys1",rad_log1,physWorld,false,0); // 2.0 mm thick so the edge fit with the edge of the box, inside
+  new G4PVPlacement(0,G4ThreeVector(-1*theDetector->PhantomHalfX + 1*mm,0,0),"rad_phys1",rad_log1,physWorld,false,0);// 2.0 mm thick so the edge fit with the edge of the box
 
-  SensitiveDetector* sd2               = new SensitiveDetector("sd2");
+  SensitiveDetector* sd2               = new SensitiveDetector("RearTracker"); // Rear Tracker
   G4Box* rad_vol2                      = new G4Box("rad_vol2",1*mm,theDetector->PhantomHalfY,theDetector->PhantomHalfZ);
   G4LogicalVolume * rad_log2           = new G4LogicalVolume(rad_vol2,air,"rad_log2",0,0,0);
   rad_log2->SetVisAttributes(sd_att);
   rad_log2->SetSensitiveDetector(sd2);
-  new G4PVPlacement(0,G4ThreeVector(theDetector->PhantomHalfX - 1*mm,0,0),"rad_phys2",rad_log2,physWorld,false,0);   // 2.0 mm thick so the edge fit with the edge of the box, outside    
+  new G4PVPlacement(0,G4ThreeVector(theDetector->PhantomHalfX + 1*mm,0,0),"rad_phys2",rad_log2,physWorld,false,0);// 2.0 mm thick so the edge fit with the edge of the box
 
   // Container box      
   G4Box* box_vol = new G4Box("box_vol",PhantomHalfX,PhantomHalfY,PhantomHalfZ);
@@ -92,69 +91,10 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   box_log->SetVisAttributes(box_att);
 
   //----------------------------------------------------------------------------------------------------------------
-  // Gammex phantom
+  // Water Tank phantom
   //----------------------------------------------------------------------------------------------------------------
-
-  if(thePhantom == "Gammex"){
-  //Plastic Material
-    //std::string mat_outer[8]  = {"CB250","MineralBone","CorticalBone","CTsolidwater","LN300","CTsolidwater","Liver","CTsolidwater"};
-    //double dens_outer[8] = {1.56   , 1.145       , 1.84         , 1.015        , 0.3   , 1.015        , 1.08  , 1.015};
-    //std::string mat_inner[8]  = {"CB230","Water","Breast","LN450","Brain","AP6Adipose","InnerBone","CTsolidwater"};
-    //double dens_inner[8] = {1.34   , 1.0   , 0.99   , 0.45  , 1.045 , 0.92       , 1.12      , 1.015};
-  
-  //Loma Linda Material
-    std::string mat_outer[8]  = {"SoftTissue_LL","CorticalBone_LL","TrabecularBone_LL","SpinalDisc_LL","BrainTissue_LL","ToothEnamel_LL","ToothDentin_LL","SinusCavities_LL"};
-    double dens_outer[8] = {1.03, 1.80, 1.18, 1.10, 1.04, 2.89, 2.14, 0.00120};
-    std::string mat_inner[8]  = {"SoftTissue_LL","CorticalBone_LL","TrabecularBone_LL","SpinalDisc_LL","BrainTissue_LL","ToothEnamel_LL","ToothDentin_LL","SinusCavities_LL"};
-    double dens_inner[8] = {1.03, 1.80, 1.18, 1.10, 1.04, 2.89, 2.14, 0.00120};
-
-  //Tissue Material
-    //std::string mat_inner[8] = {"Cartilage","HumerusWholeSpecimen","Ribs2and6","FemurWholeSpecimen","Ribs10","Cranium","FemurCylindricalShaft","ConnectiveTissue"};
-    //std::string mat_inner[8] = {"Adipose3","Adipose2","Adipose1","SoftTissue","Muscle3","Liver3","Skin2","LungInflated"};
-
-  //ExternalPhantom
-  G4VSolid* ExtPhantom = new G4Tubs("ExtPhantom",0,PhantomHalfX,PhantomHalfX,0,2*pi);
-  G4LogicalVolume *PhantomLog = new G4LogicalVolume(ExtPhantom,theMaterial->ConstructMaterial("CTsolidwater",1.015), "PhantomLog",0,0,0);
-
-  // Inserts  
-  G4VSolid* insert = new G4Tubs("insert",0,InsertRadius,PhantomHalfX,0,2*pi);
-  G4VisAttributes* ins_att  = new G4VisAttributes(G4Colour(0,1,0));
-  ins_att->SetVisibility(true);
-  ins_att->SetForceSolid(true);
-
-  G4VisAttributes* ins_att2  = new G4VisAttributes(G4Colour(1,1,0));
-  ins_att2->SetVisibility(true);
-  ins_att2->SetForceSolid(true);
-
-  //Inner Circle
-  for (int i = 0; i<8; i++){
-    G4LogicalVolume* insert_log = new G4LogicalVolume(insert,theMaterial->ConstructMaterial(mat_inner[i],dens_inner[i]),mat_inner[i],0,0,0);    
-    if(i==0)insert_log->SetVisAttributes(ins_att2);
-    else insert_log->SetVisAttributes(ins_att);
-    G4ThreeVector placement(0,InRadius,0);
-    placement.rotateZ(pi/4-pi*i/4);
-    new G4PVPlacement(0,placement,insert_log,mat_inner[i],PhantomLog,false,0);
-  }
-  //Outer Circle
-  for (int i = 0; i<8; i++){
-    G4LogicalVolume* insert_log = new G4LogicalVolume(insert,theMaterial->ConstructMaterial(mat_outer[i],dens_outer[i]),mat_outer[i],0,0,0);
-    insert_log->SetVisAttributes(ins_att);
-    G4ThreeVector placement(0,OutRadius,0);
-    placement.rotateZ(3*pi/8-pi*i/4);
-    new G4PVPlacement(0,placement,insert_log,mat_outer[i],PhantomLog,false,0);
-  }
-
-  G4RotationMatrix* rot1 = new G4RotationMatrix();
-  rot1->rotateZ(pi/4 + theAngle*pi/8.);
-  new G4PVPlacement(rot1,G4ThreeVector(PhantomPositionX,PhantomPositionY,PhantomPositionZ),"Phantom",PhantomLog,box_phys,false,0);
-  }
-
-  //----------------------------------------------------------------------------------------------------------------
-  // Slab phantom
-  //----------------------------------------------------------------------------------------------------------------
-
-
-  else if (thePhantom =="Slab"){
+  if(thePhantom == "WaterTank"){
+    cout<<"here"<<endl;
     G4int NSlabs = 1000;
     G4double halfX  = PhantomHalfX/NSlabs;
     G4Box* slab_vol = new G4Box("box_vol",halfX,PhantomHalfY,PhantomHalfZ);
@@ -162,9 +102,68 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     G4VisAttributes* slab_att  = new G4VisAttributes(G4Colour(0,1,1));
     slab_att->SetVisibility(true);
     slab_log->SetVisAttributes(slab_att);
-    for(int i=0;i<NSlabs;i++) new G4PVPlacement(0,G4ThreeVector(2*halfX*(i)-(NSlabs-1)*halfX,0,0),Form("Slabs_%d",i),slab_log,box_phys,true,i);
-        
+    for(int i=0;i<NSlabs;i++) new G4PVPlacement(0,G4ThreeVector(2*halfX*(i)-(NSlabs-1)*halfX,0,0),Form("Slabs_%d",i),slab_log,box_phys,true,i);        
   }
+
+  //----------------------------------------------------------------------------------------------------------------
+  // Gammex phantom
+  //----------------------------------------------------------------------------------------------------------------
+
+  else if(thePhantom == "Gammex"){
+    
+    //Plastic Material
+    //std::string mat_outer[8]  = {"CB250","MineralBone","CorticalBone","CTsolidwater","LN300","CTsolidwater","Liver","CTsolidwater"};
+    //double dens_outer[8] = {1.56   , 1.145       , 1.84         , 1.015        , 0.3   , 1.015        , 1.08  , 1.015};
+    //std::string mat_inner[8]  = {"CB230","Water","Breast","LN450","Brain","AP6Adipose","InnerBone","CTsolidwater"};
+    //double dens_inner[8] = {1.34   , 1.0   , 0.99   , 0.45  , 1.045 , 0.92       , 1.12      , 1.015};
+    
+    //Loma Linda Material
+    std::string mat_outer[8]  = {"SoftTissue_LL","CorticalBone_LL","TrabecularBone_LL","SpinalDisc_LL","BrainTissue_LL","ToothEnamel_LL","ToothDentin_LL","SinusCavities_LL"};
+    double dens_outer[8] = {1.03, 1.80, 1.18, 1.10, 1.04, 2.89, 2.14, 0.00120};
+    std::string mat_inner[8]  = {"SoftTissue_LL","CorticalBone_LL","TrabecularBone_LL","SpinalDisc_LL","BrainTissue_LL","ToothEnamel_LL","ToothDentin_LL","SinusCavities_LL"};
+    double dens_inner[8] = {1.03, 1.80, 1.18, 1.10, 1.04, 2.89, 2.14, 0.00120};
+
+    //Tissue Material
+    //std::string mat_inner[8] = {"Cartilage","HumerusWholeSpecimen","Ribs2and6","FemurWholeSpecimen","Ribs10","Cranium","FemurCylindricalShaft","ConnectiveTissue"};
+    //std::string mat_inner[8] = {"Adipose3","Adipose2","Adipose1","SoftTissue","Muscle3","Liver3","Skin2","LungInflated"};
+    
+    //ExternalPhantom
+    G4VSolid* ExtPhantom = new G4Tubs("ExtPhantom",0,PhantomHalfX,PhantomHalfX,0,2*pi);
+    G4LogicalVolume *PhantomLog = new G4LogicalVolume(ExtPhantom,theMaterial->ConstructMaterial("CTsolidwater",1.015), "PhantomLog",0,0,0);
+    
+    // Inserts  
+    G4VSolid* insert = new G4Tubs("insert",0,InsertRadius,PhantomHalfX,0,2*pi);
+    G4VisAttributes* ins_att  = new G4VisAttributes(G4Colour(0,1,0));
+    ins_att->SetVisibility(true);
+    ins_att->SetForceSolid(true);
+    
+    G4VisAttributes* ins_att2  = new G4VisAttributes(G4Colour(1,1,0));
+    ins_att2->SetVisibility(true);
+    ins_att2->SetForceSolid(true);
+    
+    //Inner Circle
+    for (int i = 0; i<8; i++){
+      G4LogicalVolume* insert_log = new G4LogicalVolume(insert,theMaterial->ConstructMaterial(mat_inner[i],dens_inner[i]),mat_inner[i],0,0,0);    
+      if(i==0)insert_log->SetVisAttributes(ins_att2);
+      else insert_log->SetVisAttributes(ins_att);
+      G4ThreeVector placement(0,InRadius,0);
+      placement.rotateZ(pi/4-pi*i/4);
+      new G4PVPlacement(0,placement,insert_log,mat_inner[i],PhantomLog,false,0);
+    }
+    //Outer Circle
+    for (int i = 0; i<8; i++){
+      G4LogicalVolume* insert_log = new G4LogicalVolume(insert,theMaterial->ConstructMaterial(mat_outer[i],dens_outer[i]),mat_outer[i],0,0,0);
+      insert_log->SetVisAttributes(ins_att);
+      G4ThreeVector placement(0,OutRadius,0);
+      placement.rotateZ(3*pi/8-pi*i/4);
+      new G4PVPlacement(0,placement,insert_log,mat_outer[i],PhantomLog,false,0);
+    }
+
+    G4RotationMatrix* rot1 = new G4RotationMatrix();
+    rot1->rotateZ(pi/4 + theAngle*pi/8.);
+    new G4PVPlacement(rot1,G4ThreeVector(PhantomPositionX,PhantomPositionY,PhantomPositionZ),"Phantom",PhantomLog,box_phys,false,0);
+  }
+
   //----------------------------------------------------------------------------------------------------------------
   // Wedge phantom
   //----------------------------------------------------------------------------------------------------------------
