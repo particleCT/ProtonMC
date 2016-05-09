@@ -2,7 +2,6 @@
 #include "HadrontherapyPhysicsList.hh"
 #include "G4PhysListFactory.hh"
 #include "G4VPhysicsConstructor.hh"
-
 #include "G4IonQMDPhysics.hh"
 
 // Physic lists (contained inside the Geant4 distribution)
@@ -41,7 +40,7 @@
 HadrontherapyPhysicsList::HadrontherapyPhysicsList(G4String& parWorldName):G4VModularPhysicsList(),pWorldName(parWorldName)
 {
   G4LossTableManager::Instance();
-  defaultCutValue = 0.01*mm;
+  defaultCutValue = 0.1*mm;
   cutForGamma     = defaultCutValue;//1.0*mm;
   cutForElectron  = defaultCutValue;
   cutForPositron  = defaultCutValue;

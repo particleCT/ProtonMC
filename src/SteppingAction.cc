@@ -40,21 +40,22 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
 {
 
   G4Track *tr = aStep->GetTrack();
-  if ( tr->GetTrackID()!=1 || tr->GetNextVolume()->GetName()=="physWorld") {
+  //if(tr->GetVolume()->GetName()=="box_phys" && tr->GetTrackID()!=1){
+  if ( tr->GetTrackID()!=1){ 
     tr->SetTrackStatus(fStopAndKill);
     temp_X.clear();
     temp_Y.clear();
     temp_Z.clear();
-    temp_name.clear(); }  
+    temp_name.clear(); } 
   
-  //if(tr->GetVolume()->GetName()=="box_phys" && tr->GetTrackID()==1){
-if(tr->GetTrackID()==1){
+
+  /*if(tr->GetTrackID()==1){
     G4ThreeVector preStepPos = aStep->GetPreStepPoint()->GetPosition();
     temp_X.push_back(preStepPos.x());
     temp_Y.push_back(preStepPos.y());
     temp_Z.push_back(preStepPos.z());
     temp_name.push_back(aStep->GetPreStepPoint()->GetMaterial()->GetName());
-    }
+    }*/
 
 
 }

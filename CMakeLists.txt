@@ -41,7 +41,6 @@ if (WITH_VIS)
 add_definitions(-DVIS)
 endif()
 
-
 #----------------------------------------------------------------------------
 # Locate sources and headers for this project
 # NB: headers are included so they will show up in IDEs
@@ -58,7 +57,6 @@ add_executable(${myexe} ${mymain} ${sources} ${headers})
         set(CMAKE_EXE_LINKER_FLAGS ${ROOT_LD_FLAGS})
 
 target_link_libraries(${myexe} ${Geant4_LIBRARIES}) 
-
 
 #----------------------------------------------------------------------------
 # For internal Geant4 use - but has no effect if you build this example standalone

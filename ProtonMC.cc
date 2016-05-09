@@ -25,7 +25,7 @@
 #include <iostream>
 #include <fstream>
 using namespace std;
-G4double calcRSP(OrganicMaterial* theMaterial);
+void calcRSP(OrganicMaterial* theMaterial);
 
 int main(int argc,char** argv) {
   gROOT->ProcessLine("#include <vector>");
@@ -34,13 +34,13 @@ int main(int argc,char** argv) {
   CLHEP::RanecuEngine *theRanGenerator = new CLHEP::RanecuEngine;  
   theRanGenerator->setSeed(seed);
   CLHEP::HepRandom::setTheEngine(theRanGenerator);
-    
-  G4int nProtons  = atoi(argv[1]);
-  G4double Energy = atof(argv[2]);
+ 
+  G4int nProtons  = atoi(argv[1]); 
+  G4double Energy = atof(argv[2]); // MeV
   G4String Model  = argv[3];
-  G4int angle     = atoi(argv[4]);
-  G4double thick  = atof(argv[5]);
-  G4int   thread  = atoi(argv[6]);
+  G4int angle     = atoi(argv[4]); // Degrees
+  G4double thick  = atof(argv[5]); // cm
+  G4int   thread  = atoi(argv[6]); 
   G4String paraWorldName = "ParallelWorld";
 
   G4RunManager* runManager = new G4RunManager;
@@ -64,10 +64,9 @@ int main(int argc,char** argv) {
   UImanager->ApplyCommand("/control/execute vis.mac");
   ui->SessionStart();
 
-
 #endif
   runManager->BeamOn( nProtons );
-  calcRSP(theMaterial);
+  //calcRSP(theMaterial);
   theAnalysis->Save();
 
 #ifdef VIS
@@ -77,7 +76,8 @@ int main(int argc,char** argv) {
     delete runManager;
   }
 
-G4double calcRSP(OrganicMaterial* theMaterial){
+
+void calcRSP(OrganicMaterial* theMaterial){
   G4ParticleDefinition* particle = G4Proton::Definition();
   G4EmCalculator* emCal = new G4EmCalculator;
   ofstream myfile;
@@ -87,7 +87,7 @@ G4double calcRSP(OrganicMaterial* theMaterial){
     G4Material* mat = itr->second;
     G4double tot =0;
 
-    for(int j=1400;j<3300;j++){
+    for(int j=0;j<5000;j++){
       
       G4double dedx_w = emCal->ComputeTotalDEDX( float(j/10)*MeV,particle,theMaterial->water);
       G4double dedx_b = emCal->ComputeTotalDEDX( float(j/10)*MeV,particle,mat);
@@ -98,9 +98,7 @@ G4double calcRSP(OrganicMaterial* theMaterial){
     myfile<<" "<<mat->GetDensity()/(g/cm3)<<" "<<RSP<<" "<<mat->GetName()<<endl;
   }
   myfile.close();
-  return 0;
-
-}
+  }
 
 
 

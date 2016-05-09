@@ -22,7 +22,7 @@
 #include "PrimaryGeneratorAction.hh"
 using namespace std;
 
-G4String PrimaryGeneratorAction::thePrimaryParticleName="proton";
+G4String PrimaryGeneratorAction::thePrimaryParticleName="helium";
 PrimaryGeneratorAction* PrimaryGeneratorAction::theGenerator = NULL;
 
 PrimaryGeneratorAction::PrimaryGeneratorAction(G4double E_0)
@@ -49,21 +49,32 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
   
   G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
-  G4String particleName = "proton";
-  G4ParticleDefinition* particle = particleTable->FindParticle(particleName);
+  G4String particleName = "helium";
+  G4ParticleDefinition* particle = G4IonTable::GetIonTable()->GetIon(2,4,0);//particleTable->FindParticle(particleName);
 
   Einit = ENER*MeV;
 
-
-  x0 = -1*theDetector->PhantomHalfX -1*mm; //Delta epsilon to hit all detectors
+  // Parallel
+  x0 = -1*theDetector->PhantomHalfX -0.1*mm; //Delta epsilon to hit all detectors
   y0 = G4UniformRand()*fieldSizeY-fieldSizeY/2;//G4RandGauss::shoot(0,8*mm);
   z0 = G4UniformRand()*fieldSizeZ-fieldSizeZ/2;//G4RandGauss::shoot(0,8*mm);
   px0 = 1; 
   py0 = 0; 
   pz0 = 0;
 
+  // Conical
+  /*phi   = G4UniformRand()*2*pi;//(1./6.)*pi*(G4UniformRand()-0.5);
+  theta = (1./20.)*pi*(G4UniformRand()-0.5);
+  px0 = std::cos(theta);
+  py0 = std::sin(theta)*std::cos(phi);
+  pz0 = std::sin(theta)*std::sin(phi);
+
+  x0 = -1*theDetector->PhantomHalfX -2*m;
+  y0 = 0;
+  z0 = 0;*/
+
   Position = G4ThreeVector(x0,y0,z0);
-  Momentum = G4ThreeVector(px0,pz0,pz0);
+  Momentum = G4ThreeVector(px0,py0,pz0);
 
   particleGun->SetParticleDefinition(particle);
   particleGun->SetParticleEnergy(Einit);

@@ -34,6 +34,7 @@ OrganicMaterial::OrganicMaterial(){
   elCa = man->FindOrBuildElement(20);
   elFe = man->FindOrBuildElement(26);
   elZn = man->FindOrBuildElement(30);
+
   elBa = man->FindOrBuildElement(56);
   water = new G4Material("Water",1.0*g/cm3,nel=2,kStateLiquid);   // 1.0*g/cm3                                                                      
   water->AddElement(elH,11.20*perCent);
@@ -501,7 +502,6 @@ G4Material* OrganicMaterial::ConstructMaterial(G4String Name,G4double density)
     elVector.insert(std::pair< G4Element*,G4double> ( elBa, 0.000*perCent ));
 
   }
-
   else {
     cerr << "OrganicMaterial; no match for : " << Name << endl;
     return 0;

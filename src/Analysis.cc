@@ -37,10 +37,10 @@ Analysis::Analysis(G4int thread, G4int angle,G4String theName){
   t->Branch("pz0",&pz0,"pz0/D");
   t->Branch("Einit",&Einit,"Einit/D");
   
-  t->Branch("tracks_X",&tracks_X);
+  /*t->Branch("tracks_X",&tracks_X);
   t->Branch("tracks_Y",&tracks_Y);
   t->Branch("tracks_Z",&tracks_Z);
-  t->Branch("mat_name",&mat_name);
+  t->Branch("mat_name",&mat_name);*/
 
   t->Branch("x1",&x1,"x1/D");
   t->Branch("y1",&y1,"y1/D");
@@ -79,15 +79,16 @@ void Analysis::RearFrontDetector(G4Step* aStep, G4String theName)
   }
   
   else if(theName=="RearTracker"){
+
     x1  = aStep->GetPreStepPoint()->GetPosition()[0];
     y1  = aStep->GetPreStepPoint()->GetPosition()[1];
     z1  = aStep->GetPreStepPoint()->GetPosition()[2];
-    
+
     px1 = aStep->GetPreStepPoint()->GetMomentumDirection()[0];
     py1 = aStep->GetPreStepPoint()->GetMomentumDirection()[1];
     pz1 = aStep->GetPreStepPoint()->GetMomentumDirection()[2];
     
-    mat_name = &(theSteppingAction->temp_name);
+    /*mat_name = &(theSteppingAction->temp_name);
     tracks_X = &(theSteppingAction->temp_X);
     tracks_Y = &(theSteppingAction->temp_Y);
     tracks_Z = &(theSteppingAction->temp_Z);
@@ -95,7 +96,7 @@ void Analysis::RearFrontDetector(G4Step* aStep, G4String theName)
     tracks_X->push_back(x1);
     tracks_Y->push_back(y1);
     tracks_Z->push_back(z1);
-    mat_name->push_back( aStep->GetPreStepPoint()->GetMaterial()->GetName().data() );
+    mat_name->push_back( aStep->GetPreStepPoint()->GetMaterial()->GetName().data() );*/
 
     Id    = aStep->GetTrack()->GetTrackID();
     Estop = aStep->GetPreStepPoint()->GetKineticEnergy();

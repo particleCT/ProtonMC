@@ -43,8 +43,9 @@ DetectorConstruction::DetectorConstruction(G4String theModel,G4int angle,G4doubl
 
 G4VPhysicalVolume* DetectorConstruction::Construct()
 {
-  water = theMaterial->water;
+  water = theMaterial->ConstructMaterial("Water",1.0);//water;
   G4Material* air   = theMaterial->ConstructMaterial("Air",0.0001025); 
+  
   G4double world_size       = 3*m;  
   G4double PhantomPositionX = 0*cm;
   G4double PhantomPositionY = 0*cm;
@@ -68,7 +69,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   // Detectors 
   SensitiveDetector* sd1               = new SensitiveDetector("FrontTracker"); // Front Tracker
   G4Box* rad_vol1                      = new G4Box("rad_vol1",1.0*mm,PhantomHalfY,PhantomHalfZ);
-  G4LogicalVolume * rad_log1           = new G4LogicalVolume(rad_vol1,air,"rad_log1",0,0,0);
+  G4LogicalVolume * rad_log1           = new G4LogicalVolume(rad_vol1,water,"rad_log1",0,0,0);
   G4VisAttributes* sd_att = new G4VisAttributes(G4Colour(0,1,1));
   sd_att->SetVisibility(true);
   rad_log1->SetVisAttributes(sd_att);
@@ -77,7 +78,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
   SensitiveDetector* sd2               = new SensitiveDetector("RearTracker"); // Rear Tracker
   G4Box* rad_vol2                      = new G4Box("rad_vol2",1*mm,theDetector->PhantomHalfY,theDetector->PhantomHalfZ);
-  G4LogicalVolume * rad_log2           = new G4LogicalVolume(rad_vol2,air,"rad_log2",0,0,0);
+  G4LogicalVolume * rad_log2           = new G4LogicalVolume(rad_vol2,water,"rad_log2",0,0,0);
   rad_log2->SetVisAttributes(sd_att);
   rad_log2->SetSensitiveDetector(sd2);
   new G4PVPlacement(0,G4ThreeVector(theDetector->PhantomHalfX + 1*mm,0,0),"rad_phys2",rad_log2,physWorld,false,0);// 2.0 mm thick so the edge fit with the edge of the box
@@ -94,7 +95,6 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   // Water Tank phantom
   //----------------------------------------------------------------------------------------------------------------
   if(thePhantom == "WaterTank"){
-    cout<<"here"<<endl;
     G4int NSlabs = 1000;
     G4double halfX  = PhantomHalfX/NSlabs;
     G4Box* slab_vol = new G4Box("box_vol",halfX,PhantomHalfY,PhantomHalfZ);
@@ -112,22 +112,22 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   else if(thePhantom == "Gammex"){
     
     //Plastic Material
-    //std::string mat_outer[8]  = {"CB250","MineralBone","CorticalBone","CTsolidwater","LN300","CTsolidwater","Liver","CTsolidwater"};
-    //double dens_outer[8] = {1.56   , 1.145       , 1.84         , 1.015        , 0.3   , 1.015        , 1.08  , 1.015};
-    //std::string mat_inner[8]  = {"CB230","Water","Breast","LN450","Brain","AP6Adipose","InnerBone","CTsolidwater"};
-    //double dens_inner[8] = {1.34   , 1.0   , 0.99   , 0.45  , 1.045 , 0.92       , 1.12      , 1.015};
+    std::string mat_outer[8]  = {"CB250","MineralBone","CorticalBone","CTsolidwater","LN300","CTsolidwater","Liver","CTsolidwater"};
+    double dens_outer[8] = {1.56   , 1.145       , 1.84         , 1.015        , 0.3   , 1.015        , 1.08  , 1.015};
+    std::string mat_inner[8]  = {"CB230","Water","Breast","LN450","Brain","AP6Adipose","InnerBone","CTsolidwater"};
+    double dens_inner[8] = {1.34   , 1.0   , 0.99   , 0.45  , 1.045 , 0.92       , 1.12      , 1.015};
     
     //Loma Linda Material
-    std::string mat_outer[8]  = {"SoftTissue_LL","CorticalBone_LL","TrabecularBone_LL","SpinalDisc_LL","BrainTissue_LL","ToothEnamel_LL","ToothDentin_LL","SinusCavities_LL"};
+    /*std::string mat_outer[8]  = {"SoftTissue_LL","CorticalBone_LL","TrabecularBone_LL","SpinalDisc_LL","BrainTissue_LL","ToothEnamel_LL","ToothDentin_LL","SinusCavities_LL"};
     double dens_outer[8] = {1.03, 1.80, 1.18, 1.10, 1.04, 2.89, 2.14, 0.00120};
     std::string mat_inner[8]  = {"SoftTissue_LL","CorticalBone_LL","TrabecularBone_LL","SpinalDisc_LL","BrainTissue_LL","ToothEnamel_LL","ToothDentin_LL","SinusCavities_LL"};
-    double dens_inner[8] = {1.03, 1.80, 1.18, 1.10, 1.04, 2.89, 2.14, 0.00120};
+    double dens_inner[8] = {1.03, 1.80, 1.18, 1.10, 1.04, 2.89, 2.14, 0.00120};*/
 
     //Tissue Material
     //std::string mat_inner[8] = {"Cartilage","HumerusWholeSpecimen","Ribs2and6","FemurWholeSpecimen","Ribs10","Cranium","FemurCylindricalShaft","ConnectiveTissue"};
     //std::string mat_inner[8] = {"Adipose3","Adipose2","Adipose1","SoftTissue","Muscle3","Liver3","Skin2","LungInflated"};
     
-    //ExternalPhantom
+    //External Phantom
     G4VSolid* ExtPhantom = new G4Tubs("ExtPhantom",0,PhantomHalfX,PhantomHalfX,0,2*pi);
     G4LogicalVolume *PhantomLog = new G4LogicalVolume(ExtPhantom,theMaterial->ConstructMaterial("CTsolidwater",1.015), "PhantomLog",0,0,0);
     
@@ -144,7 +144,9 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     //Inner Circle
     for (int i = 0; i<8; i++){
       G4LogicalVolume* insert_log = new G4LogicalVolume(insert,theMaterial->ConstructMaterial(mat_inner[i],dens_inner[i]),mat_inner[i],0,0,0);    
-      if(i==0)insert_log->SetVisAttributes(ins_att2);
+      if(i==4){
+	insert_log->SetVisAttributes(ins_att2);
+      }
       else insert_log->SetVisAttributes(ins_att);
       G4ThreeVector placement(0,InRadius,0);
       placement.rotateZ(pi/4-pi*i/4);
@@ -732,10 +734,10 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     G4VisAttributes* linepair_att  = new G4VisAttributes(G4Colour(0,0,1));
     linepair_att->SetVisibility(true);
     linepair_att->SetForceSolid(true);
-    G4Material *bone = theMaterial->ConstructMaterial("ToothEnamel_LL",2.89);
+    G4Material *Aluminium = new G4Material("Aluminum", 13, 26.98*g/mole, 2.7*g/cm3);
     
-    G4Box* SlantedBox = new G4Box("SlantedBox",5*cm,5*cm,5*cm);
-    G4LogicalVolume* SlantedLog = new G4LogicalVolume(SlantedBox,bone ,"SlantedLog");
+    G4Box* SlantedBox = new G4Box("SlantedBox",2.5*cm,5*cm,5*cm);
+    G4LogicalVolume* SlantedLog = new G4LogicalVolume(SlantedBox,Aluminium ,"SlantedLog");
     SlantedLog->SetVisAttributes(linepair_att);
     
     G4RotationMatrix* rotSlanted = new G4RotationMatrix();
@@ -818,8 +820,6 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     sph_att->SetVisibility(true);
     sph_att->SetForceSolid(true);
 
-
-
     G4Tubs* CTP404 = new G4Tubs("CTP404",0,150*mm/2,25/2*mm,0,2*pi);
     G4LogicalVolume* CTP404Log = new G4LogicalVolume(CTP404,water ,"CTP404Log"); // Water
 
@@ -871,7 +871,6 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     new G4PVPlacement(0,placement,"acril_5_World",acrilLog5,CTP404World,false,0);
    
     */
-
     // 8 Sensitometry 12 mm Large Rod
     G4Tubs* large_rod  = new G4Tubs("large_rod", 0, 12*mm/2, 25/2*mm, 0,2*pi);
     G4LogicalVolume* large_rod_1 = new G4LogicalVolume(large_rod,Acrylic ,"large_rod_1");  //Acrylic
@@ -917,8 +916,6 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
 
     //CTP528 High Resolution Module
-
-
     G4VisAttributes* att2  = new G4VisAttributes(G4Colour(1,0,1));
     att2->SetVisibility(true);
 
@@ -936,12 +933,9 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     for(int i =1;i<21;i++){
 
       double GapSize = 0.5/float(i);
-      G4ThreeVector placement4(0,45*mm,0);
+      G4ThreeVector placement4(0,55*mm,0);
       int nbLP = 5;
       G4RotationMatrix* rotLP = new G4RotationMatrix();
-
-     
-
 
       if(i==1){
 	nbLP =2;
@@ -956,17 +950,16 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 	nbLP = 4;
 	placement4.rotateZ(16*float(i+1)*pi/180);
 	rotLP->rotateZ( (180- 16*float(i+1))*pi/180);}
-
       else{	
 	placement4.rotateZ(16*float(i+1)*pi/180);	
 	rotLP->rotateZ( (180- 16*float(i+1))*pi/180);}
       
-      G4Box* cont_box = new G4Box("cont_box", (nbLP-0.5)*GapSize*cm,2*mm,2*mm);
+      G4Box* cont_box = new G4Box("cont_box", (nbLP-0.5)*GapSize*cm,4*mm,4*mm);
       G4LogicalVolume* cont_log = new G4LogicalVolume(cont_box,water,"cont_log"); //Water
       G4VPhysicalVolume* cont_world = new G4PVPlacement(rotLP,placement4,"cont_World",cont_log,CTP528World,false,0); // Container for the LP
       for(int j=0;j<nbLP;j++){
 
-	G4Box* LinePair = new G4Box("LinePair",GapSize/2*cm,2*mm,2*mm);
+	G4Box* LinePair = new G4Box("LinePair",GapSize/2*cm,4*mm,4*mm);
 	G4LogicalVolume* LinePair_Log = new G4LogicalVolume(LinePair,Aluminium,"LinePair_Log"); // Aluminium
 	LinePair_Log->SetVisAttributes(sph_att);
 	new G4PVPlacement(0,G4ThreeVector(-(nbLP-0.5)*GapSize*cm + GapSize/2*cm +  2*j*GapSize*cm,0,0),"LinePair_world",LinePair_Log,cont_world,false,0);
@@ -974,7 +967,12 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     }
   
 
-}
+  }
+  else{
+    cout<<"The phantom name cannot be found."<<endl;
+  }
+
+
   return physWorld;
 }
 

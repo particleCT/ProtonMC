@@ -10,10 +10,7 @@ SensitiveDetector::SensitiveDetector(G4String name):G4VSensitiveDetector(name),t
 G4bool SensitiveDetector::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 {
   if ( aStep->GetPreStepPoint()->GetStepStatus() == fGeomBoundary && aStep->GetTrack()->GetTrackID()==1){
-    cout<<theName<<endl;
-    if(theName == "FrontTracker" || theName == "RearTracker"){
       theAnalysis->RearFrontDetector(aStep, theName);
-    }
   }
   return true;
 }
