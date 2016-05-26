@@ -35,19 +35,21 @@ int main(int argc,char** argv) {
   theRanGenerator->setSeed(seed);
   CLHEP::HepRandom::setTheEngine(theRanGenerator);
  
-  G4int nProtons  = atoi(argv[1]); 
-  G4double Energy = atof(argv[2]); // MeV
-  G4String Model  = argv[3];
-  G4int angle     = atoi(argv[4]); // Degrees
-  G4double thick  = atof(argv[5]); // cm
-  G4int   thread  = atoi(argv[6]); 
+  G4int nProtons   = atoi(argv[1]); 
+  G4double Energy  = atof(argv[2]); // MeV
+  G4String Model   = argv[3];
+  G4int angle      = atoi(argv[4]); // Degrees
+  G4double thick   = atof(argv[5]); // cm
+  G4int   thread   = atoi(argv[6]); 
+  G4double Znumber = atof(argv[7]);
+  G4double Anumber = atof(argv[8]); 
   G4String paraWorldName = "ParallelWorld";
 
   G4RunManager* runManager = new G4RunManager;
   runManager->SetUserInitialization(new HadrontherapyPhysicsList(paraWorldName));
   DetectorConstruction* myDC = new DetectorConstruction(Model,angle,thick);
   myDC->RegisterParallelWorld( new ParallelWorldConstruction(paraWorldName));
-  runManager->SetUserAction( new PrimaryGeneratorAction(Energy));
+  runManager->SetUserAction( new PrimaryGeneratorAction(Energy, Znumber, Anumber));
   runManager->SetUserAction( new SteppingAction() );
   runManager->SetUserInitialization( myDC );
   Analysis* theAnalysis    = new Analysis(thread,angle,Model);

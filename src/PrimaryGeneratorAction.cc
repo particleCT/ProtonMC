@@ -22,12 +22,10 @@
 #include "PrimaryGeneratorAction.hh"
 using namespace std;
 
-G4String PrimaryGeneratorAction::thePrimaryParticleName="helium";
 PrimaryGeneratorAction* PrimaryGeneratorAction::theGenerator = NULL;
 
-PrimaryGeneratorAction::PrimaryGeneratorAction(G4double E_0)
+PrimaryGeneratorAction::PrimaryGeneratorAction(G4double E_0, G4double Znumber, G4double Anumber):ENER(E_0),Z(Znumber),A(Anumber)
 { 
-
   theDetector = DetectorConstruction::GetInstance();
   ENER = E_0;
   nProtonsGenerated = 0;
@@ -49,9 +47,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
   
   G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
-  G4String particleName = "helium";
-  G4ParticleDefinition* particle = G4IonTable::GetIonTable()->GetIon(2,4,0);//particleTable->FindParticle(particleName);
-
+  G4ParticleDefinition* particle = G4IonTable::GetIonTable()->GetIon(Z,A,0);
   Einit = ENER*MeV;
 
   // Parallel

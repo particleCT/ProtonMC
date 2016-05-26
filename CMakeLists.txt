@@ -56,7 +56,7 @@ add_executable(${myexe} ${mymain} ${sources} ${headers})
         EXECUTE_PROCESS(COMMAND root-config --libs OUTPUT_VARIABLE ROOT_LD_FLAGS OUTPUT_STRIP_TRAILING_WHITESPACE)
         set(CMAKE_EXE_LINKER_FLAGS ${ROOT_LD_FLAGS})
 
-target_link_libraries(${myexe} ${Geant4_LIBRARIES}) 
+target_link_libraries(${myexe} ${Geant4_LIBRARIES} ${CMAKE_EXE_LINKER_FLAGS}) 
 
 #----------------------------------------------------------------------------
 # For internal Geant4 use - but has no effect if you build this example standalone

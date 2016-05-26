@@ -23,9 +23,9 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
   public:
 
-  PrimaryGeneratorAction(G4double);
+  PrimaryGeneratorAction(G4double, G4double, G4double);
   ~PrimaryGeneratorAction();
-  G4double ENER, ESPR, ANGU_X, ANGU_Y, CORR_X, CORR_Y, SPOT_CX, SPOT_CY, SPOT_CZ, SPOT_X, SPOT_Y, SPOT_Z, RAD;   
+  G4double ENER, ESPR, ANGU_X, ANGU_Y, CORR_X, CORR_Y, SPOT_CX, SPOT_CY, SPOT_CZ, SPOT_X, SPOT_Y, SPOT_Z, RAD, Z, A;   
   TFile *f;
   TTree *t;
 
@@ -61,8 +61,6 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
   G4double fieldSizeZ,fieldSizeY;
   
   std::ifstream *inP;
-  
-  static G4String thePrimaryParticleName;
 };
 
 #endif
