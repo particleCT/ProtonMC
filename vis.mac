@@ -27,6 +27,7 @@
 /vis/scene/add/trajectories smooth
 /vis/modeling/trajectories/create/drawByParticleID
 /vis/modeling/trajectories/drawByParticleID-0/set proton green
+/vis/modeling/trajectories/drawByParticleID-0/set helium green
 /vis/modeling/trajectories/drawByParticleID-0/set C12[0.0] red
 /vis/modeling/trajectories/drawByParticleID-0/set gamma yellow
 /vis/filtering/trajectories/create/particleFilter

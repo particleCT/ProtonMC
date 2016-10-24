@@ -4,6 +4,7 @@ cmake_minimum_required(VERSION 2.6 FATAL_ERROR)
 
 set(name    ProtonMC)  # equivalent to "name := exampleN01" in G4 GNUmakefiles
 set(WITH_VIS false)
+set(WITH_MIRD false)
 ############ What's below should not need to be changed ############
 
 # http://www.cmake.org/cmake/help/cmake_tutorial.html
@@ -41,6 +42,7 @@ if (WITH_VIS)
 add_definitions(-DVIS)
 endif()
 
+
 #----------------------------------------------------------------------------
 # Locate sources and headers for this project
 # NB: headers are included so they will show up in IDEs
@@ -48,15 +50,22 @@ endif()
 file(GLOB sources ${PROJECT_SOURCE_DIR}/src/*.cc)
 file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
 
+if(WITH_MIRD)
+include_directories(${PROJECT_SOURCE_DIR}/MIRDPhantom/include)
+file(GLOB sources_mird ${PROJECT_SOURCE_DIR}/MIRDPhantom/src/*.cc)
+file(GLOB headers_mird ${PROJECT_SOURCE_DIR}/MIRDPhantom/include/*.hh)
+add_definitions(-DMIRD)
+endif()
 #----------------------------------------------------------------------------
 # Add the executable, and link it to the Geant4 libraries
 #
 link_directories( $ENV{G4WORKDIR}/tmp/$ENV{G4SYSTEM}/)
-add_executable(${myexe} ${mymain} ${sources} ${headers})
+add_executable(${myexe} ${mymain} ${sources} ${sources_mird} ${headers} ${headers_mird})
         EXECUTE_PROCESS(COMMAND root-config --libs OUTPUT_VARIABLE ROOT_LD_FLAGS OUTPUT_STRIP_TRAILING_WHITESPACE)
         set(CMAKE_EXE_LINKER_FLAGS ${ROOT_LD_FLAGS})
 
-target_link_libraries(${myexe} ${Geant4_LIBRARIES}) 
+target_link_libraries(${myexe} ${Geant4_LIBRARIES} ${CMAKE_EXE_LINKER_FLAGS}) 
+
 
 #----------------------------------------------------------------------------
 # For internal Geant4 use - but has no effect if you build this example standalone

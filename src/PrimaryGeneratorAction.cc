@@ -22,12 +22,11 @@
 #include "PrimaryGeneratorAction.hh"
 using namespace std;
 
-G4String PrimaryGeneratorAction::thePrimaryParticleName="proton";
+
 PrimaryGeneratorAction* PrimaryGeneratorAction::theGenerator = NULL;
 
 PrimaryGeneratorAction::PrimaryGeneratorAction(G4double E_0,G4int Anumber):A(Anumber)
 { 
-
   theDetector = DetectorConstruction::GetInstance();
   ENER = E_0;
   nProtonsGenerated = 0;
@@ -48,7 +47,6 @@ PrimaryGeneratorAction::~PrimaryGeneratorAction()
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
   
-
   if(A==1){
     G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
     particle = particleTable->FindParticle("proton");
