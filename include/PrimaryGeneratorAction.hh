@@ -5,7 +5,7 @@
 #include "globals.hh"
 #include "G4ios.hh"
 #include "TTree.h"
-
+#include "G4ParticleDefinition.hh"
 
 #include <sstream>
 #include <string>
@@ -23,7 +23,7 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
   public:
 
-  PrimaryGeneratorAction(G4double);
+  PrimaryGeneratorAction(G4double,G4int);
   ~PrimaryGeneratorAction();
   G4double ENER, ESPR, ANGU_X, ANGU_Y, CORR_X, CORR_Y, SPOT_CX, SPOT_CY, SPOT_CZ, SPOT_X, SPOT_Y, SPOT_Z, RAD;   
   TFile *f;
@@ -46,6 +46,7 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
   Double_t x1,y1,z1,px1,py1,pz1;
   Double_t E0,Estop;
   Int_t   Id;
+  G4int A;
   G4int nProtonsGenerated;
   Double_t x,y,z,theta,phi,Einit;
   G4ThreeVector Position, Momentum;
@@ -59,7 +60,7 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
   G4String PSD_Name;
   G4String PARTICLE;
   G4double fieldSizeZ,fieldSizeY;
-  
+  G4ParticleDefinition* particle;
   std::ifstream *inP;
   
   static G4String thePrimaryParticleName;

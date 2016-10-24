@@ -20,12 +20,18 @@
 #include "G4SystemOfUnits.hh"
 #include "G4PhysicalConstants.hh"
 
+#ifdef MIRD
+#include "G4HumanPhantomMaterial.hh"
+#include "G4MaleBuilder.hh"
+#include "G4PhantomBuilder.hh"
+#endif
+
 using namespace CLHEP;
 DetectorConstruction* DetectorConstruction::theDetector=NULL;
 DetectorConstruction::~DetectorConstruction()
 {theDetector = NULL; }
 
-DetectorConstruction::DetectorConstruction(G4String theModel,G4int angle,G4double thick)
+DetectorConstruction::DetectorConstruction(G4String theModel,G4double angle,G4double thick)
 : G4VUserDetectorConstruction()
 { 
   theThickness = thick;
@@ -44,6 +50,7 @@ DetectorConstruction::DetectorConstruction(G4String theModel,G4int angle,G4doubl
 G4VPhysicalVolume* DetectorConstruction::Construct()
 {
   water = theMaterial->ConstructMaterial("Water",1.0);//water;
+
   G4Material* air   = theMaterial->ConstructMaterial("Air",0.0001025); 
   
   G4double world_size       = 3*m;  
@@ -53,7 +60,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
   G4double InRadius         = 5.5 *cm;
   G4double OutRadius        = 10.5*cm;
-  G4double InsertRadius     = 1.4*cm;
+  G4double InsertRadius     = 1.45*cm;
 
   //Cubic Water world
   G4Box* boxWorld = new G4Box("World",world_size,world_size,world_size);
@@ -63,13 +70,11 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   world_att->SetVisibility(true);
   logicWorld->SetVisAttributes(world_att);
 
-  G4RotationMatrix* rotTotal = new G4RotationMatrix();
-  rotTotal->rotateY(theAngle*pi/180.);
 
   // Detectors 
   SensitiveDetector* sd1               = new SensitiveDetector("FrontTracker"); // Front Tracker
   G4Box* rad_vol1                      = new G4Box("rad_vol1",1.0*mm,PhantomHalfY,PhantomHalfZ);
-  G4LogicalVolume * rad_log1           = new G4LogicalVolume(rad_vol1,water,"rad_log1",0,0,0);
+  G4LogicalVolume * rad_log1           = new G4LogicalVolume(rad_vol1,air,"rad_log1",0,0,0);
   G4VisAttributes* sd_att = new G4VisAttributes(G4Colour(0,1,1));
   sd_att->SetVisibility(true);
   rad_log1->SetVisAttributes(sd_att);
@@ -78,7 +83,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
   SensitiveDetector* sd2               = new SensitiveDetector("RearTracker"); // Rear Tracker
   G4Box* rad_vol2                      = new G4Box("rad_vol2",1*mm,theDetector->PhantomHalfY,theDetector->PhantomHalfZ);
-  G4LogicalVolume * rad_log2           = new G4LogicalVolume(rad_vol2,water,"rad_log2",0,0,0);
+  G4LogicalVolume * rad_log2           = new G4LogicalVolume(rad_vol2,air,"rad_log2",0,0,0);
   rad_log2->SetVisAttributes(sd_att);
   rad_log2->SetSensitiveDetector(sd2);
   new G4PVPlacement(0,G4ThreeVector(theDetector->PhantomHalfX + 1*mm,0,0),"rad_phys2",rad_log2,physWorld,false,0);// 2.0 mm thick so the edge fit with the edge of the box
@@ -92,17 +97,83 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   box_log->SetVisAttributes(box_att);
 
   //----------------------------------------------------------------------------------------------------------------
-  // Water Tank phantom
+  // MIRD Phantom
   //----------------------------------------------------------------------------------------------------------------
-  if(thePhantom == "WaterTank"){
+#ifdef MIRD
+  if(thePhantom == "MIRD"){
+    material = new G4HumanPhantomMaterial();
+    material -> DefineMaterials();
+    G4BasePhantomBuilder*  builder = 0;
+    builder = new G4MaleBuilder;
+    builder->SetModel("MIRD");
+    builder->SetMotherVolume(box_phys);
+    builder->BuildHead("black", false, sensitivities["Head"]);
+    builder->BuildSkull("orange", false,sensitivities["Skull"]);
+    builder->BuildBrain("yellow", true,sensitivities["Brain"]);
+    builder->BuildTrunk("yellow", false, sensitivities["Trunk"]);
+    builder->BuildLeftLeg("yellow", false,sensitivities["LeftLeg"]);
+    builder->BuildRightLeg("yellow", false,sensitivities["RightLeg"]);
+    builder->BuildLeftArmBone("grey", true,sensitivities["LeftArmBone"]);
+    builder->BuildRightArmBone("grey", true, sensitivities["RightArmBone"]);
+    builder->BuildLeftLegBone("grey", true,sensitivities["LeftLegBone"]);
+    builder ->BuildRightLegBone("grey", true,sensitivities["RightLegBone"]);
+    builder->BuildUpperSpine("yellow", true,sensitivities["UpperSpine"]);
+    builder->BuildLeftScapula("grey", true, sensitivities["LeftScapula"]);
+    builder->BuildRightScapula("grey", true, sensitivities["RightScapula"]);
+    builder->BuildLeftAdrenal("yellow", true, sensitivities["LeftAdrenal"]);
+    builder->BuildRightAdrenal("yellow", true, sensitivities["RightAdrenal"]);
+    builder->BuildThymus("orange", true,sensitivities["Thymus"]);
+    builder->BuildLeftClavicle("grey", true,sensitivities["LeftClavicle"]);
+    builder->BuildRightClavicle("grey", true,sensitivities["RightClavicle"]);
+    builder->BuildSmallIntestine("orange", true,sensitivities["SmallIntestine"]);
+    builder->BuildRibCage("grey", true,sensitivities["RibCage"]);
+    builder->BuildMiddleLowerSpine("yellow", true,sensitivities["MiddleLowerSpine"]);
+    builder->BuildPelvis("grey", true,sensitivities["Pelvis"]);
+    builder->BuildStomach("orange", true,sensitivities["Stomach"]);
+    builder->BuildUpperLargeIntestine("lightBlue", true,sensitivities["UpperLargeIntestine"]);
+    builder->BuildLowerLargeIntestine("lightBlue", true,sensitivities["LowerLargeIntestine"]);
+    builder->BuildSpleen("green", true,sensitivities["Spleen"]);
+    builder->BuildPancreas("purple", true,sensitivities["Pancreas"]);
+    builder->BuildLiver("orange", true,sensitivities["Liver"]);                                                                                                                                              
+    builder->BuildLeftKidney("green", true,sensitivities["LeftKidney"]);
+    builder->BuildRightKidney("green", true,sensitivities["RightKidney"]);
+    builder->BuildUrinaryBladder("green", true,sensitivities["UrinaryBladder"]);
+    builder->BuildHeart("red", true,sensitivities["Hearth"]);// to do MIRD                                                                                                                                     
+    builder->BuildLeftLung("blue", true,sensitivities["LeftLung"]);
+    builder->BuildRightLung("blue", true,sensitivities["RightLung"]);
+    builder->BuildThyroid("orange", true,sensitivities["Thyroid"]);
+    builder -> BuildMaleGenitalia("yellow",false,sensitivities["MaleGenitalia"]);
+    builder -> BuildLeftTeste("purple",true,sensitivities["LeftTeste"]);
+    builder -> BuildRightTeste("purple",true,sensitivities["RightTeste"]);
+    G4VPhysicalVolume* result=builder->GetPhantom();
+    delete builder;
+  }
+#endif
+  //----------------------------------------------------------------------------------------------------------------
+  // Water Path phantom
+  //----------------------------------------------------------------------------------------------------------------
+  if(thePhantom == "PathPhantom"){
+    G4Material* bone  = theMaterial->ConstructMaterial("CorticalBone",1.84);//CorticalBone
+    //G4Material* lung  = theMaterial->ConstructMaterial("LungInflated",0.26);//LungInflated
     G4int NSlabs = 1000;
     G4double halfX  = PhantomHalfX/NSlabs;
-    G4Box* slab_vol = new G4Box("box_vol",halfX,PhantomHalfY,PhantomHalfZ);
-    G4LogicalVolume* slab_log  = new G4LogicalVolume(slab_vol,water,"box_log");
-    G4VisAttributes* slab_att  = new G4VisAttributes(G4Colour(0,1,1));
-    slab_att->SetVisibility(true);
-    slab_log->SetVisAttributes(slab_att);
-    for(int i=0;i<NSlabs;i++) new G4PVPlacement(0,G4ThreeVector(2*halfX*(i)-(NSlabs-1)*halfX,0,0),Form("Slabs_%d",i),slab_log,box_phys,true,i);        
+    G4Box* slab_vol = new G4Box("box_vol",halfX,PhantomHalfY,PhantomHalfZ/2);
+    G4LogicalVolume* slab_log_w  = new G4LogicalVolume(slab_vol,water,"box_log_w");
+    G4LogicalVolume* slab_log_b  = new G4LogicalVolume(slab_vol,bone,"box_log_b");
+
+    G4VisAttributes* slab_att_w    = new G4VisAttributes(G4Colour(0,1,1));
+    slab_att_w->SetVisibility(true);
+    G4VisAttributes* slab_att_b    = new G4VisAttributes(G4Colour(1,0,1));
+    slab_att_b->SetVisibility(true);
+
+    slab_log_w->SetVisAttributes(slab_att_w);
+    slab_log_b->SetVisAttributes(slab_att_b);
+
+    for(int i=0;i<NSlabs;i++) 
+      {
+	new G4PVPlacement(0,G4ThreeVector(2*halfX*(i)-(NSlabs-1)*halfX,0, PhantomHalfZ/2),Form("Slabs_%d_w",i),slab_log_b,box_phys,true,i);        
+	new G4PVPlacement(0,G4ThreeVector(2*halfX*(i)-(NSlabs-1)*halfX,0,-PhantomHalfZ/2),Form("Slabs_%d_b",i),slab_log_b,box_phys,true,i);        
+      }
   }
 
   //----------------------------------------------------------------------------------------------------------------
@@ -162,7 +233,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     }
 
     G4RotationMatrix* rot1 = new G4RotationMatrix();
-    rot1->rotateZ(pi/4 + theAngle*pi/8.);
+    rot1->rotateZ(pi/4 + theAngle*pi/180.);
     new G4PVPlacement(rot1,G4ThreeVector(PhantomPositionX,PhantomPositionY,PhantomPositionZ),"Phantom",PhantomLog,box_phys,false,0);
   }
 
@@ -735,7 +806,8 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     linepair_att->SetVisibility(true);
     linepair_att->SetForceSolid(true);
     G4Material *Aluminium = new G4Material("Aluminum", 13, 26.98*g/mole, 2.7*g/cm3);
-    
+    //G4Material *InnerBone = theMaterial->ConstructMaterial("InnerBone",1.089);
+    //InnerBone->GetIonisation()->SetMeanExcitationEnergy(67.138689*eV);
     G4Box* SlantedBox = new G4Box("SlantedBox",2.5*cm,5*cm,5*cm);
     G4LogicalVolume* SlantedLog = new G4LogicalVolume(SlantedBox,Aluminium ,"SlantedLog");
     SlantedLog->SetVisAttributes(linepair_att);
@@ -743,7 +815,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     G4RotationMatrix* rotSlanted = new G4RotationMatrix();
     rotSlanted->rotateX(2.5*pi/180.);
     
-    new G4PVPlacement(rotSlanted,G4ThreeVector(),"SlantedPhys",SlantedLog,box_phys,false,0);
+    //new G4PVPlacement(rotSlanted,G4ThreeVector(),"SlantedPhys",SlantedLog,box_phys,false,0);
 }
 
   //----------------------------------------------------------------------------------------------------------------

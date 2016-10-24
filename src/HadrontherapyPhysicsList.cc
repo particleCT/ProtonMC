@@ -40,7 +40,7 @@
 HadrontherapyPhysicsList::HadrontherapyPhysicsList(G4String& parWorldName):G4VModularPhysicsList(),pWorldName(parWorldName)
 {
   G4LossTableManager::Instance();
-  defaultCutValue = 0.1*mm;
+  defaultCutValue = 1.0*mm;
   cutForGamma     = defaultCutValue;//1.0*mm;
   cutForElectron  = defaultCutValue;
   cutForPositron  = defaultCutValue;

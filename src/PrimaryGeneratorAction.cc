@@ -22,10 +22,10 @@
 #include "PrimaryGeneratorAction.hh"
 using namespace std;
 
-G4String PrimaryGeneratorAction::thePrimaryParticleName="helium";
+G4String PrimaryGeneratorAction::thePrimaryParticleName="proton";
 PrimaryGeneratorAction* PrimaryGeneratorAction::theGenerator = NULL;
 
-PrimaryGeneratorAction::PrimaryGeneratorAction(G4double E_0)
+PrimaryGeneratorAction::PrimaryGeneratorAction(G4double E_0,G4int Anumber):A(Anumber)
 { 
 
   theDetector = DetectorConstruction::GetInstance();
@@ -48,12 +48,16 @@ PrimaryGeneratorAction::~PrimaryGeneratorAction()
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
   
-  G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
-  G4String particleName = "helium";
-  G4ParticleDefinition* particle = G4IonTable::GetIonTable()->GetIon(2,4,0);//particleTable->FindParticle(particleName);
 
-  Einit = ENER*MeV;
-
+  if(A==1){
+    G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
+    particle = particleTable->FindParticle("proton");
+    Einit = ENER*MeV;
+  }
+  else{
+    particle = G4IonTable::GetIonTable()->GetIon(A/2,A,0);
+    Einit = ENER*(A)*MeV;
+  }
   // Parallel
   x0 = -1*theDetector->PhantomHalfX -0.1*mm; //Delta epsilon to hit all detectors
   y0 = G4UniformRand()*fieldSizeY-fieldSizeY/2;//G4RandGauss::shoot(0,8*mm);

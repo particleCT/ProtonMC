@@ -129,20 +129,33 @@ G4Material* OrganicMaterial::ConstructMaterial(G4String Name,G4double density)
   }
   else if (Name=="Liver"){//1.08*g/cm3 
 
-    elVector.insert(std::pair< G4Element*,G4double> ( elH,  11.00*perCent ));
+    /*elVector.insert(std::pair< G4Element*,G4double> ( elH,  11.00*perCent ));
     elVector.insert(std::pair< G4Element*,G4double> ( elC,  4.100*perCent ));
     elVector.insert(std::pair< G4Element*,G4double> ( elN,  1.200*perCent ));
     elVector.insert(std::pair< G4Element*,G4double> ( elO,  82.50*perCent ));
-    elVector.insert(std::pair< G4Element*,G4double> ( elCl, 1.200*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elCl, 1.200*perCent ));*/
+    elVector.insert(std::pair< G4Element*,G4double> ( elH,  8.060*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elC,  67.01*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elN,  2.470*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elO,  20.01*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elCl, 0.140*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elCa, 2.310*perCent ));
 
   }  
   else if (Name=="InnerBone"){//1.12*g/cm3
 
-    elVector.insert(std::pair< G4Element*,G4double> ( elH,  7.900*perCent ));
+    /*elVector.insert(std::pair< G4Element*,G4double> ( elH,  7.900*perCent ));
     elVector.insert(std::pair< G4Element*,G4double> ( elC,  63.79*perCent ));
     elVector.insert(std::pair< G4Element*,G4double> ( elN,  4.230*perCent ));
     elVector.insert(std::pair< G4Element*,G4double> ( elO,  9.880*perCent ));
-    elVector.insert(std::pair< G4Element*,G4double> ( elCl, 14.20*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elCl, 14.20*perCent ));*/
+    elVector.insert(std::pair< G4Element*,G4double> ( elH,  6.670*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elC,  55.64*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elN,  1.906*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elO,  23.52*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elP,  3.230*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elCl, 0.110*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elCa, 8.860*perCent ));
 
   }
   else if (Name=="MineralBone"){//1.145*g/cm3

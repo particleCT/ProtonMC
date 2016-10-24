@@ -24,6 +24,8 @@ public:
   std::vector<double> temp_X;
   std::vector<double> temp_Y;
   std::vector<double> temp_Z;
+  std::vector<double> temp_E;
+  std::vector<double> temp_Radlen;
 
   std::vector<TString> temp_name;
 

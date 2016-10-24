@@ -25,7 +25,8 @@ public:
   vector<double>* tracks_X;
   vector<double>* tracks_Y;
   vector<double>* tracks_Z;
-  
+  vector<double>* tracks_E;
+  vector<double>* Radlen;
   vector<TString>*  mat_name;
   
 private:
@@ -36,6 +37,7 @@ private:
   SteppingAction         *theSteppingAction;
   Double_t x0,y0,z0,px0,py0,pz0;
   Double_t x1,y1,z1,px1,py1,pz1;
+  Double_t theta_y1, theta_z1;
   Double_t Einit,Estop;
   G4int Id;
 };
