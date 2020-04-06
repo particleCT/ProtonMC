@@ -1,5 +1,4 @@
-#include "EmPhysics_pCT.hh"
-#include "HadrontherapyPhysicsList.hh"
+#include "PhysicsList.hh"
 #include "PrimaryGeneratorAction.hh"
 #include "OrganicMaterial.hh"
 #include "G4NistManager.hh"
@@ -9,6 +8,7 @@
 #include "G4IonTable.hh"
 #include "G4RunManager.hh"
 #include <TROOT.h>
+#include "G4ExceptionHandler.hh"
 #include "G4Material.hh"
 #include "G4NistManager.hh"
 #include "G4EmCalculator.hh"
@@ -18,18 +18,17 @@
 #include "G4SystemOfUnits.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4UImanager.hh"
-#include "ParallelWorldConstruction.hh"
+
 #ifdef VIS
 #include "G4VisExecutive.hh"
-#include "G4UIExecutive.hh"
+
 #endif
-
-
+#include "G4UIExecutive.hh"
 #include <iostream>
 #include <fstream>
 using namespace std;
-void calcRSP(OrganicMaterial* theMaterial);
-
+void calcRSP(PrimaryGeneratorAction *);
+void calcStoppingPower(PrimaryGeneratorAction *);
 int main(int argc,char** argv) {
   gROOT->ProcessLine("#include <vector>");
   time_t seed;
@@ -38,79 +37,104 @@ int main(int argc,char** argv) {
   theRanGenerator->setSeed(seed);
   CLHEP::HepRandom::setTheEngine(theRanGenerator);
   if(argc<=6) {
-    cout<<"Please input the following arguments : NProtons Energy Model Angle Thick Thread ANumber"<<endl;
+    cout<<"Please input the following arguments : NParticules Energy Model Angle Thick Thread ANumber"<<endl;
     return 0;
   }
   G4int nProtons  = atoi(argv[1]); 
   G4double Energy = atof(argv[2]); // MeV
   G4String Model  = argv[3];
-  G4double angle  = atoi(argv[4]); // Degrees
+  G4double angle  = atof(argv[4]); // Degrees
   G4double thick  = atof(argv[5]); // cm
   G4int   thread  = atoi(argv[6]); 
   G4int  ANumber  = atoi(argv[7]); //Atomic Number
-  G4String paraWorldName = "ParallelWorld";
 
+  G4String paraWorldName = "";  
   G4RunManager* runManager = new G4RunManager;
-  runManager->SetUserInitialization(new HadrontherapyPhysicsList(paraWorldName));
+  //G4ExceptionHandler* handler = new G4ExceptionHandler();
+  runManager->SetUserInitialization(new PhysicsList(paraWorldName));
   DetectorConstruction* myDC = new DetectorConstruction(Model,angle,thick);
-  myDC->RegisterParallelWorld( new ParallelWorldConstruction(paraWorldName));
-  runManager->SetUserAction( new PrimaryGeneratorAction(Energy,ANumber));
+
+  PrimaryGeneratorAction *theGenerator =  new PrimaryGeneratorAction(Energy,ANumber);
+  runManager->SetUserAction(theGenerator); 
   runManager->SetUserAction( new SteppingAction() );
   runManager->SetUserInitialization( myDC );
   Analysis* theAnalysis    = new Analysis(thread,angle,Model);
-  OrganicMaterial* theMaterial = OrganicMaterial::GetInstance();  
-  runManager->Initialize();
 
+  runManager->SetVerboseLevel(0);
+  runManager->Initialize();
+  
   //G4UImanager * UImanager = G4UImanager::GetUIpointer();
+  //UImanager->ApplyCommand("/process/inactivate msc all");
+  //UImanager->ApplyCommand("/process/inactivate had all");
   //UImanager->ApplyCommand("/process/eLoss/fluct false");
+  //UImanager->ApplyCommand("/process/eLoss/CSDARange true");
   //UImanager->ApplyCommand("/run/verbose 1");
   //UImanager->ApplyCommand("/event/verbose 1");
   //UImanager->ApplyCommand("/tracking/verbose 2");
   //G4UIExecutive * ui = new G4UIExecutive(argc,argv);  
-#ifdef VIS
-  G4UImanager * UImanager = G4UImanager::GetUIpointer();
+
+  #ifdef VIS
+
   G4VisManager* visManager = new G4VisExecutive;
+  visManager->SetVerboseLevel(0);
   visManager->Initialize();
+  G4UImanager * UImanager = G4UImanager::GetUIpointer();
   G4cout << " UI session starts ..." << G4endl;
   G4UIExecutive* ui = new G4UIExecutive(argc, argv);
   UImanager->ApplyCommand("/control/execute vis.mac");
   ui->SessionStart();
+  #endif
 
-#endif
-  runManager->BeamOn( nProtons );
-  calcRSP(theMaterial);
+  runManager->BeamOn( nProtons );  
   theAnalysis->Save();
-
-#ifdef VIS
-    delete visManager;
-    delete ui;
-#endif
-    delete runManager;
+  calcRSP(theGenerator);
+  calcStoppingPower(theGenerator);
+  //delete visManager;
+  return 0;
+  delete runManager;
   }
 
-
-void calcRSP(OrganicMaterial* theMaterial){
-  //G4ParticleDefinition* particle = G4Proton::Definition();
-  G4ParticleDefinition* particle = G4IonTable::GetIonTable()->GetIon(2,4,0);   
+void calcRSP(PrimaryGeneratorAction* theGenerator){
+  G4ParticleDefinition* particle = theGenerator->particle;
   G4EmCalculator* emCal = new G4EmCalculator;
   ofstream myfile;
-  myfile.open ("Water_geant4.dat");
-  //for(auto itr=theMaterial->theMaterialList.begin(); itr!=theMaterial->theMaterialList.end(); itr++) {
-  //G4int I = 0;
-  // G4Material* mat = itr->second;
-  //G4double tot =0;
-  for(int j=0;j<2000;j++){      
-    G4double dedx_w = emCal->ComputeTotalDEDX( j*MeV,particle,theMaterial->water);
-    myfile<<j<<" "<<dedx_w<<endl;
-      //G4double dedx_b = emCal->ComputeTotalDEDX( j*MeV,particle,mat);
-      //tot +=dedx_b/dedx_w;
-      //I+=1;
+  myfile.open ("RSP.txt");
+  myfile<<"Density RelativeElectronDensity IValue RSP Name"<<endl; 
+  G4MaterialTable *theMaterialTable = G4Material::GetMaterialTable();
+  G4double waterelectrondensity = 0;
+  for(size_t i =0;i<theMaterialTable->size();i++){
+      
+    G4int I = 0;
+    G4double tot =0;
+    G4Material* water = theMaterialTable->at(0);
+    waterelectrondensity = water->GetElectronDensity()/(g/cm3);
+    for(int j=1;j<50000;j++){
+      G4double dedx_w = emCal->ComputeElectronicDEDX( double(j)/10*MeV,particle,water);
+      G4double dedx_b = emCal->ComputeElectronicDEDX( double(j)/10*MeV,particle,theMaterialTable->at(i));
+      tot +=dedx_b/dedx_w;
+      I+=1;
     }
-  //G4double RSP = tot/I;
-  // myfile<<" "<<mat->GetDensity()/(g/cm3)<<" "<<RSP<<" "<<mat->GetName()<<endl;
-  //}
+    G4double RSP = tot/I;
+    G4double electrondensity = theMaterialTable->at(i)->GetElectronDensity()/(g/cm3);
+    myfile<<theMaterialTable->at(i)->GetDensity()/(g/cm3)<<" "<<electrondensity/waterelectrondensity<<" "<<theMaterialTable->at(i)->GetIonisation()->GetMeanExcitationEnergy()/eV<<" "<<RSP<<" "<<theMaterialTable->at(i)->GetName()<<endl;
+    }
   myfile.close();
-  }
+  
+}
 
+void calcStoppingPower(PrimaryGeneratorAction* theGenerator){
+  G4ParticleDefinition* particle = theGenerator->particle;
+  G4EmCalculator* emCal = new G4EmCalculator;
+  ofstream myfile;
+  myfile.open ("Water_Geant4.dat");
+  G4MaterialTable *theMaterialTable = G4Material::GetMaterialTable();
+  G4Material* water = theMaterialTable->at(0);
+  for(int j=1;j<50000;j++){
+    G4double dedx_w = emCal->ComputeElectronicDEDX( double(j)/10*MeV,particle,water);
+    myfile<<double(j)/10*MeV<<" "<<dedx_w*MeV/mm<<" "<<endl;
+  }
+  myfile.close();
+
+}
 
 

@@ -9,9 +9,6 @@ class G4LogicalVolume;
 class OrganicMaterial;
 
 
-#ifdef MIRD
-class G4HumanPhantomMaterial;
-#endif
 
 
 class DetectorConstruction : public G4VUserDetectorConstruction
@@ -24,14 +21,11 @@ public:
   G4String thePhantom;
   G4double theThickness;
   OrganicMaterial* theMaterial;
+
   G4int theAngle;
   G4double PhantomHalfX,PhantomHalfY,PhantomHalfZ;
   G4Material* water;
 private:
-#ifdef MIRD
-  G4HumanPhantomMaterial* material;
-  std::map<std::string,G4bool> sensitivities;
-#endif
   static DetectorConstruction* theDetector;
 
 };

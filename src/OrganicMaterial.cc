@@ -40,7 +40,6 @@ OrganicMaterial::OrganicMaterial(){
   water->AddElement(elH,11.20*perCent);
   water->AddElement(elO,88.80*perCent);
   water->GetIonisation()->SetMeanExcitationEnergy(75.0*eV);
-
 }
 
 OrganicMaterial::~OrganicMaterial(){ theMaterial = NULL; }
@@ -102,12 +101,11 @@ G4Material* OrganicMaterial::ConstructMaterial(G4String Name,G4double density)
     elVector.insert(std::pair< G4Element*,G4double> ( elCl, 0.140*perCent ));
     elVector.insert(std::pair< G4Element*,G4double> ( elCa, 0.950*perCent ));
 
-  } 
-  else if (Name=="Water"){//1.0*g/cm3   
+  }
+  else if (Name=="Water"){//1.0*g/cm3
 
     elVector.insert(std::pair< G4Element*,G4double> ( elH,  11.20*perCent ));
     elVector.insert(std::pair< G4Element*,G4double> ( elO,  88.80*perCent ));
-
   } 
   else if (Name=="CTsolidwater"){//1.015*g/cm3
 
@@ -199,7 +197,7 @@ G4Material* OrganicMaterial::ConstructMaterial(G4String Name,G4double density)
   }
 
   ////  ////  ////  ////  //// 
-  //   1  N. Hünemohr, H. Paganetti, S. Greilich, O. Jäkel, and J. Seco, “Tissue decomposition from dual energy CT data for MC based dose ca  //   lculation in particle therapy,” 
+  //   1  N. Hünemohr, H. Paganetti, S. Greilich, O. Jäkel, and J. Seco, “Tissue decomposition from dual energy CT data for MC based dose calculation in particle therapy,” 
   //   Medical Physics 41(6), 061714 (2014).
   ////  ////  ////  ////  ////
   
@@ -515,6 +513,425 @@ G4Material* OrganicMaterial::ConstructMaterial(G4String Name,G4double density)
     elVector.insert(std::pair< G4Element*,G4double> ( elBa, 0.000*perCent ));
 
   }
+
+  ////  ////  ////  ////  ////
+  //   1. Woodard H Q and White D R 1986 The composition of body tissues The British Journal of Radiology 59 1209–18
+  //   2. White D R, Woodard H Q and Hammond S M 1987 Average soft-tissue and bone models for use in radiation dosimetry The British Journal of Radiology 60 907–13
+  //   3. International Commission on Radiation Units and Measurements 1992 ICRU Report 46 - Photon, electron, proton, and neutron interaction data for body tissues 
+  ////  ////  ////  ////  ////
+
+  else if (Name=="brain_white_Woodard_1986"){// 1.04 g/cm3
+
+    elVector.insert(std::pair< G4Element*,G4double> ( elH,  10.60*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elC,  19.40*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elN,  2.500*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elO,  66.10*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elNa, 0.200*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elMg, 0.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elP,  0.400*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elS,  0.200*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elCl, 0.300*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elAr, 0.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elK,  0.300*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elCa, 0.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elFe, 0.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elZn, 0.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elBa, 0.000*perCent ));
+
+  }
+
+  else if (Name=="blood_whole_Woodard_1986"){ // 1.06 g/cm3
+
+    elVector.insert(std::pair< G4Element*,G4double> ( elH,  10.20*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elC,  11.00*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elN,  3.300*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elO,  74.50*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elNa, 0.100*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elMg, 0.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elP,  0.100*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elS,  0.200*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elCl, 0.300*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elAr, 0.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elK,  0.200*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elCa, 0.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elFe, 0.100*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elZn, 0.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elBa, 0.000*perCent ));
+
+  }
+
+  else if (Name=="aorta_Woodard_1986"){ // 1.05 g/cm3
+
+    elVector.insert(std::pair< G4Element*,G4double> ( elH,  9.900*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elC,  14.70*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elN,  4.200*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elO,  69.80*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elNa, 0.200*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elMg, 0.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elP,  0.400*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elS,  0.300*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elCl, 0.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elAr, 0.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elK,  0.100*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elCa, 0.400*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elFe, 0.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elZn, 0.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elBa, 0.000*perCent ));
+
+  }
+
+  else if (Name=="kidney1_Woodard_1986"){ // 1.05 g/cm3
+
+    elVector.insert(std::pair< G4Element*,G4double> ( elH,  10.20*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elC,  16.00*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elN,  3.400*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elO,  69.30*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elNa, 0.200*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elMg, 0.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elP,  0.200*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elS,  0.200*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elCl, 0.200*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elAr, 0.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elK,  0.200*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elCa, 0.100*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elFe, 0.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elZn, 0.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elBa, 0.000*perCent ));
+
+  }
+
+  else if (Name=="spleen_Woodard_1986"){ // 1.06 g/cm3
+
+    elVector.insert(std::pair< G4Element*,G4double> ( elH,  10.30*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elC,  11.30*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elN,  3.200*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elO,  74.10*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elNa, 0.100*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elMg, 0.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elP,  0.300*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elS,  0.200*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elCl, 0.200*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elAr, 0.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elK,  0.300*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elCa, 0.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elFe, 0.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elZn, 0.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elBa, 0.000*perCent ));
+
+  }
+
+  else if (Name=="adrenal_gland_Woodard_1986"){ // 1.03 g/cm3
+
+    elVector.insert(std::pair< G4Element*,G4double> ( elH,  10.60*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elC,  28.40*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elN,  2.600*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elO,  57.80*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elNa, 0.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elMg, 0.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elP,  0.100*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elS,  0.200*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elCl, 0.200*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elAr, 0.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elK,  0.100*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elCa, 0.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elFe, 0.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elZn, 0.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elBa, 0.000*perCent ));
+
+  }
+
+  else if (Name=="Gland_mean_Z_Woodard_1986"){  // 1.02 g/cm3
+
+    elVector.insert(std::pair< G4Element*,G4double> ( elH,  10.60*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elC,  33.20*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elN,  3.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elO,  52.70*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elNa, 0.100*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elMg, 0.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elP,  0.100*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elS,  0.200*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elCl, 0.100*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elAr, 0.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elK,  0.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elCa, 0.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elFe, 0.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elZn, 0.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elBa, 0.000*perCent ));
+
+  }
+
+  else if (Name=="bile_Woodard_1986"){ // 1.03 g/cm3
+
+    elVector.insert(std::pair< G4Element*,G4double> ( elH,  10.80*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elC,  6.100*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elN,  0.100*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elO,  82.20*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elNa, 0.400*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elMg, 0.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elP,  0.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elS,  0.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elCl, 0.400*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elAr, 0.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elK,  0.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elCa, 0.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elFe, 0.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elZn, 0.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elBa, 0.000*perCent ));
+
+  }
+
+  else if (Name=="liver1_Woodard_1986"){ // 1.05 g/cm3
+
+    elVector.insert(std::pair< G4Element*,G4double> ( elH,  10.30*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elC,  15.60*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elN,  2.700*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elO,  70.10*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elNa, 0.200*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elMg, 0.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elP,  0.300*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elS,  0.300*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elCl, 0.200*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elAr, 0.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elK,  0.300*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elCa, 0.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elFe, 0.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elZn, 0.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elBa, 0.000*perCent ));
+
+  }
+  else if (Name=="Average_male_soft_tissue_Woodard_1986"){ // 1.03 g/cm3
+
+    elVector.insert(std::pair< G4Element*,G4double> ( elH,  10.50*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elC,  25.60*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elN,  2.700*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elO,  60.20*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elNa, 0.100*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elMg, 0.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elP,  0.200*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elS,  0.300*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elCl, 0.200*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elAr, 0.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elK,  0.200*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elCa, 0.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elFe, 0.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elZn, 0.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elBa, 0.000*perCent ));
+
+  }
+
+  else if (Name=="Lung_Woodard_1986"){ // 0.26 g/cm3
+
+    elVector.insert(std::pair< G4Element*,G4double> ( elH,  10.30*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elC,  10.50*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elN,  3.100*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elO,  74.90*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elNa, 0.200*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elMg, 0.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elP,  0.200*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elS,  0.300*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elCl, 0.300*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elAr, 0.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elK,  0.200*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elCa, 0.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elFe, 0.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elZn, 0.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elBa, 0.000*perCent ));
+
+  }
+
+  else if (Name=="red_marrow_Woodard_1986"){ //1.03 g/cm3
+
+    elVector.insert(std::pair< G4Element*,G4double> ( elH,  10.50*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elC,  41.40*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elN,  3.400*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elO,  43.90*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elNa, 0.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elMg, 0.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elP,  0.100*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elS,  0.200*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elCl, 0.200*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elAr, 0.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elK,  0.200*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elCa, 0.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elFe, 0.100*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elZn, 0.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elBa, 0.000*perCent ));
+
+  }
+
+  else if (Name=="stomach_Woodard_1986"){ // 1.05 g/cm3
+
+    elVector.insert(std::pair< G4Element*,G4double> ( elH,  10.40*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elC,  13.90*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elN,  2.900*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elO,  72.10*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elNa, 0.100*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elMg, 0.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elP,  0.100*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elS,  0.200*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elCl, 0.100*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elAr, 0.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elK,  0.200*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elCa, 0.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elFe, 0.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elZn, 0.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elBa, 0.000*perCent ));
+
+  }
+
+  else if (Name=="small_intestine_wall_Woodard_1986"){ // 1.03 g/cm3
+
+    elVector.insert(std::pair< G4Element*,G4double> ( elH,  10.60*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elC,  11.50*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elN,  2.200*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elO,  75.10*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elNa, 0.100*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elMg, 0.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elP,  0.100*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elS,  0.100*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elCl, 0.200*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elAr, 0.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elK,  0.100*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elCa, 0.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elFe, 0.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elZn, 0.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elBa, 0.000*perCent ));
+
+  }
+
+  else if (Name=="Adipose_mean_Z_Woodard_1986"){ // 0.95 g/cm3
+
+    elVector.insert(std::pair< G4Element*,G4double> ( elH,  11.40*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elC,  59.80*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elN,  0.700*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elO,  27.80*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elNa, 0.100*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elMg, 0.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elP,  0.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elS,  0.100*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elCl, 0.100*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elAr, 0.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elK,  0.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elCa, 0.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elFe, 0.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elZn, 0.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elBa, 0.000*perCent ));
+
+  }
+
+  else if (Name=="Muscle_mean_Z_Woodard_1986"){ // 1.05 g/cm3
+
+    elVector.insert(std::pair< G4Element*,G4double> ( elH,  10.20*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elC,  14.30*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elN,  3.400*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elO,  71.00*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elNa, 0.100*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elMg, 0.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elP,  0.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elS,  0.300*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elCl, 0.100*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elAr, 0.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elK,  0.400*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elCa, 0.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elFe, 0.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elZn, 0.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elBa, 0.000*perCent ));
+
+  }
+
+  else if (Name=="vertebral_column_C4_ICRU_report_46"){ // 1.42 g/cm3
+
+    elVector.insert(std::pair< G4Element*,G4double> ( elH,  6.300*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elC,  26.10*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elN,  3.900*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elO,  43.60*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elNa, 0.100*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elMg, 0.100*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elP,  6.100*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elS,  0.300*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elCl, 0.100*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elAr, 0.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elK,  0.100*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elCa, 13.30*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elFe, 0.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elZn, 0.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elBa, 0.000*perCent ));
+
+  }
+
+  else if (Name=="Rib_2nd_ICRU_report_46"){ // 1.41 g/cm3
+    elVector.insert(std::pair< G4Element*,G4double> ( elH,  6.400*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elC,  26.30*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elN,  3.900*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elO,  43.60*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elNa, 0.100*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elMg, 0.100*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elP,  6.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elS,  0.300*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elCl, 0.100*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elAr, 0.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elK,  0.100*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elCa, 13.10*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elFe, 0.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elZn, 0.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elBa, 0.000*perCent ));
+
+  }
+  else if (Name=="Cranium_ICRU_report_46"){//1.61*g/cm3
+
+    elVector.insert(std::pair< G4Element*,G4double> ( elH,  5.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elC,  21.20*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elN,  4.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elO,  43.50*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elF,  0.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elNa, 0.100*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elMg, 0.200*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elSi, 0.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elP,  8.100*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elS,  0.300*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elCl, 0.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elK,  0.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elCa, 17.60*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elFe, 0.000*perCent ));
+  }
+
+  else if (Name=="brain_greymatter_Woodard_1986"){//1.04*g/cm3
+
+    elVector.insert(std::pair< G4Element*,G4double> ( elH,  10.70*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elC,  9.500*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elN,  1.800*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elO,  76.70*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elF,  0.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elNa, 0.200*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elMg, 0.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elSi, 0.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elP,  0.300*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elS,  0.200*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elCl, 0.300*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elK,  0.300*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elCa, 0.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elFe, 0.000*perCent ));
+  }
+
+
+  else if (Name=="cortical_bone_ICRU_Report_46"){//1.92*g/cm3
+
+    elVector.insert(std::pair< G4Element*,G4double> ( elH,  3.400*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elC,  15.50*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elN,  4.200*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elO,  43.50*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elF,  0.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elNa, 0.100*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elMg, 0.200*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elSi, 0.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elP,  10.30*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elS,  0.300*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elCl, 0.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elK,  0.000*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elCa, 22.50*perCent ));
+    elVector.insert(std::pair< G4Element*,G4double> ( elFe, 0.000*perCent ));
+  }
+
   else {
     cerr << "OrganicMaterial; no match for : " << Name << endl;
     return 0;
@@ -532,6 +949,7 @@ G4Material* OrganicMaterial::ConstructMaterial(G4String Name,G4double density)
   // Create and insert the material
   mat = new G4Material(name,massdensity*(g/cm3),nel=elVector.size(),kStateSolid);
   for(auto itr=elVector.begin(); itr!=elVector.end(); itr++) mat->AddElement(itr->first, itr->second);
+  if(Name=="Water") mat->GetIonisation()->SetMeanExcitationEnergy(75.0*eV); 
   theMaterialList.insert(std::pair< G4String,G4Material*> ( name, mat ));
 
   return mat;

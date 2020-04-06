@@ -41,12 +41,9 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   
   G4Track *tr = aStep->GetTrack();
   G4ThreeVector preStepPos = aStep->GetPreStepPoint()->GetPosition();
-  // Total Energy deposit in a 1 mm cube in the center
-  if(abs(preStepPos.x()*mm)<1.0 && abs(preStepPos.y()*mm)<1.0 && abs(preStepPos.z()*mm)<1.0) TotEnergyDeposit += aStep->GetTotalEnergyDeposit();
-  // Primary in the center
-  if(abs(preStepPos.x()*mm)<1.0 && aStep->GetTrack()->GetCreatorProcess()==0) NPrimMiddle++;
 
-
+  if(abs(preStepPos.x()*mm)<0.5) TotEnergyDeposit += aStep->GetTotalEnergyDeposit(); // Total Energy deposit
+  if(aStep->GetTrack()->GetCreatorProcess()==0 && ) // Primary
   if(tr->GetTrackID()==1){
     temp_X.push_back(preStepPos.x());
     temp_Y.push_back(preStepPos.y());

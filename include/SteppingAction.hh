@@ -26,10 +26,9 @@ public:
   std::vector<double> temp_Z;
   std::vector<double> temp_E;
   std::vector<double> temp_Radlen;
-
   std::vector<TString> temp_name;
-
-
+  G4double TotEnergyDeposit = 0.;
+  G4int NPrimMiddle = 0;
   virtual void UserSteppingAction(const G4Step* astep);
   static inline SteppingAction* GetInstance() { return theSteppingAction; }
 
