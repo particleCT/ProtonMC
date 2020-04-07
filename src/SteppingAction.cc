@@ -32,7 +32,8 @@ SteppingAction::~SteppingAction()
 {theSteppingAction=NULL;}
 SteppingAction::SteppingAction()
 {
-  theAnalysis = Analysis::GetInstance();
+  theAnalysis  = Analysis::GetInstance();
+  theGenerator = PrimaryGeneratorAction::GetInstance();
   theSteppingAction=this;
 }
 
@@ -41,10 +42,11 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   
   G4Track *tr = aStep->GetTrack();
   G4ThreeVector preStepPos = aStep->GetPreStepPoint()->GetPosition();
-  // Total Energy deposit in a 1 mm cube in the center
-  if(abs(preStepPos.x()*mm)<1.0 && abs(preStepPos.y()*mm)<1.0 && abs(preStepPos.z()*mm)<1.0) TotEnergyDeposit += aStep->GetTotalEnergyDeposit();
   // Primary in the center
-  if(abs(preStepPos.x()*mm)<1.0 && aStep->GetTrack()->GetCreatorProcess()==0) NPrimMiddle++;
+  if(abs(preStepPos.x()*mm)<1.0 && aStep->GetTrack()->GetTrackID()==1 && theGenerator->MiddleAlive==0){
+    theGenerator->MiddleAlive=1;
+    NPrimMiddle++;
+  }
 
 
   if(tr->GetTrackID()==1){

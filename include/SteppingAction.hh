@@ -33,8 +33,9 @@ public:
   static inline SteppingAction* GetInstance() { return theSteppingAction; }
 
 private:
-  static SteppingAction* theSteppingAction;
-  Analysis*              theAnalysis;
+  static SteppingAction*  theSteppingAction;
+  Analysis*               theAnalysis;
+  PrimaryGeneratorAction* theGenerator;
 };
 
 #endif

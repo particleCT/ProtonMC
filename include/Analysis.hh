@@ -14,11 +14,12 @@ class SteppingAction;
 class Analysis
 {
 public:
-  Analysis(G4int,G4double, G4String);
+  Analysis(G4int,G4double, G4String, G4int);
   ~Analysis();
   static inline Analysis* GetInstance() { return theAnalysis; }
   void analyseHit(G4Step*,G4String);
-  TTree  *t;
+  TTree  *t; //phasespace
+  TTree  *t2;//specific data
   TFile *f1;
   void Save();
   void RearFrontDetector(G4Step* aStep, G4String theName);
@@ -32,7 +33,9 @@ public:
   vector<TString>*  mat_name;
   vector<TString>*  vol_name;
   std::string  proc_name, part_name;
-  G4double TotEnergyDeposit = 0.;
+  G4float  TotEnergyDeposit = 0.;
+  G4int    NEnergyDeposit =0;
+  G4int    NPart;
 private:
 
   static Analysis* theAnalysis;

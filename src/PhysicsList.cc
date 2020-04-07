@@ -51,7 +51,7 @@
 PhysicsList::PhysicsList(G4String& parWorldName):G4VModularPhysicsList(),pWorldName(parWorldName)
 {
   G4LossTableManager::Instance();
-  defaultCutValue = 0.1*mm;//1.0*mm;
+  defaultCutValue = 1.0*mm;//1.0*mm;
   cutForGamma     = defaultCutValue;
   cutForElectron  = defaultCutValue;
   cutForPositron  = defaultCutValue;
@@ -66,23 +66,38 @@ PhysicsList::PhysicsList(G4String& parWorldName):G4VModularPhysicsList(),pWorldN
   SetVerboseLevel(1);
 
   // EM physics
-  emPhysicsList = new G4EmStandardPhysics_option3(1);
-  emName = G4String("emstandard_opt3");
+  emPhysicsList = new G4EmStandardPhysics_option4();
+  hadronPhys.push_back( new LocalIonIonInelasticPhysic());
+  hadronPhys.push_back( new G4DecayPhysics());
+  //hadronPhys.push_back( new G4RadioactiveDecayPhysics());
+  hadronPhys.push_back( new G4EmExtraPhysics());
+  hadronPhys.push_back( new G4HadronElasticPhysics());
+  hadronPhys.push_back( new G4HadronPhysicsQGSP_BIC());
+  hadronPhys.push_back( new G4StoppingPhysics());
 
+  //hadronPhys.push_back( new G4IonBinaryCascadePhysics());
+  //hadronPhys.push_back( new G4IonQMDPhysics());
+
+  //AddPhysicsList("standard_opt4");
+  //AddPhysicsList("local_ion_ion_inelastic");
+  //hadronPhys.push_back( new G4DecayPhysics());
+  //hadronPhys.push_back( new G4RadioactiveDecayPhysics());
+  //hadronPhys.push_back( new G4EmExtraPhysics());
+  //hadronPhys.push_back( new G4HadronElasticPhysicsHP());
+  //hadronPhys.push_back( new G4StoppingPhysics());
+  //hadronPhys.push_back( new G4HadronPhysicsQGSP_BIC_HP());
+  
   // Decay physics and all particles
   decPhysicsList = new G4DecayPhysics();
-
-
-  //hadronPhys.push_back( new G4EmExtraPhysics());
-  //hadronPhys.push_back( new G4HadronElasticPhysics());
-  //hadronPhys.push_back( new G4StoppingPhysics());
-  //hadronPhys.push_back( new G4HadronPhysicsQGSP_BIC());
-  AddPhysicsList("standard_opt3");
-  //AddPhysicsList("local_ion_ion_inelastic");
-
+  //emName = G4String("emstandard_opt3");
+  
+  
   //AddPhysicsList("binary_ion");
-  //AddPhysicsList("elastic");
   //AddPhysicsList("qmd_ion_ion_inelastic");
+  //AddPhysicsList("standard_opt3");
+  //AddPhysicsList("local_ion_ion_inelastic");  
+  //AddPhysicsList("elastic");
+  
 
 }
 

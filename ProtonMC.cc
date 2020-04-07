@@ -58,7 +58,7 @@ int main(int argc,char** argv) {
   runManager->SetUserAction(theGenerator); 
   runManager->SetUserAction( new SteppingAction() );
   runManager->SetUserInitialization( myDC );
-  Analysis* theAnalysis    = new Analysis(thread,angle,Model);
+  Analysis* theAnalysis    = new Analysis(thread,angle,Model, nProtons);
 
   runManager->SetVerboseLevel(0);
   runManager->Initialize();

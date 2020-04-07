@@ -52,6 +52,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   else if(A==4) particle = G4Alpha::Alpha();
   else particle = G4IonTable::GetIonTable()->GetIon(int(A/2),A,0); // rest
 
+  MiddleAlive = 0;
   particleGun->SetParticleDefinition(particle);
   Einit = ENER*A*MeV;
 

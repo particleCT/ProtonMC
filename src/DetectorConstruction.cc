@@ -53,7 +53,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 {
   water = theMaterial->ConstructMaterial("Water",1.0);//water;
   G4Material* air   = theMaterial->ConstructMaterial("Air",0.0001025); 
-  G4Material* theWorldMaterial = water;
+  G4Material* theWorldMaterial = air;
 
   G4double world_size       = 5*m;  
   G4double PhantomPositionX = 0*cm;
@@ -88,7 +88,10 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   rad_log2->SetVisAttributes(sd_att);
   rad_log2->SetSensitiveDetector(sd2);
   new G4PVPlacement(0,G4ThreeVector(theDetector->PhantomHalfX + 1*mm,0,0),"rad_phys2",rad_log2,physWorld,false,0);// 2.0 mm thick so the edge fit with the box edge
+  
 
+
+  
   // Container box      
   G4Box* box_vol = new G4Box("box_vol",PhantomHalfX,PhantomHalfY,PhantomHalfZ);
   G4LogicalVolume* box_log  = new G4LogicalVolume(box_vol, theWorldMaterial,"box_log");
@@ -111,20 +114,32 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     linepair_att->SetForceSolid(true);
     G4Tubs* WaterCylinder  = new G4Tubs("WaterCylinder",0, 20./2*cm, 30./2*cm, 0, 2*pi);
     G4LogicalVolume* WaterCyl_log = new G4LogicalVolume(WaterCylinder, water, "WaterCyl_log");
-    new G4PVPlacement(0,G4ThreeVector(0,0,0),"WaterCyl_phys",WaterCyl_log,box_phys,false,0);
+    G4PVPlacement* WaterCyl_phys  = new G4PVPlacement(0,G4ThreeVector(0,0,0),"WaterCyl_phys",WaterCyl_log,box_phys,false,0);
 
+    SensitiveDetector* doseCube          = new SensitiveDetector("doseCube"); // Rear Tracker
+    G4Box* doseCube_box                  = new G4Box("doseCube_box",1*mm,1*mm, 1*mm);
+    G4LogicalVolume * doseCube_log       = new G4LogicalVolume(doseCube_box, water,"doseCube_log",0,0,0);
+    doseCube_log->SetVisAttributes(sd_att);
+    doseCube_log->SetSensitiveDetector(doseCube);
+    new G4PVPlacement(0,G4ThreeVector(0,0,0),"doseCuebe_phys",doseCube_log,WaterCyl_phys,false,0);
+
+
+  
+
+    
   }
 
   //----------------------------------------------------------------------------------------------------------------
   // Water Box phantom
   //----------------------------------------------------------------------------------------------------------------
-  if(thePhantom == "WaterBox"){
+  else if(thePhantom == "WaterBox"){
     G4VisAttributes* linepair_att  = new G4VisAttributes(G4Colour(0,0,1));
     linepair_att->SetVisibility(true);
     linepair_att->SetForceSolid(true);
-    G4Box* WaterBox  = new G4Box("WaterBox",20./2*cm, 30./2*cm, 30./2.*cm);
+    G4Box* WaterBox  = new G4Box("WaterBox",10./2*cm, 30./2*cm, 30./2.*cm);
     G4LogicalVolume* WaterBox_log = new G4LogicalVolume(WaterBox, water, "WaterBox_log");
-    new G4PVPlacement(0,G4ThreeVector(0,0,0),"WaterBox_phys",WaterBox_log,box_phys,false,0);
+    new G4PVPlacement(0,G4ThreeVector(-5*cm,0,0),"WaterBox_phys",WaterBox_log,box_phys,false,0);
+    new G4PVPlacement(0,G4ThreeVector(5*cm,0,0),"WaterBox_phys2",WaterBox_log,box_phys,false,0);
 
   }
 

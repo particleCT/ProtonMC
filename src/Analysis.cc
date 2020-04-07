@@ -20,9 +20,9 @@
 Analysis* Analysis::theAnalysis=NULL;
 Analysis::~Analysis(){theAnalysis=NULL;}
 
-Analysis::Analysis(G4int thread, G4double angle,G4String theName){
+Analysis::Analysis(G4int thread, G4double angle,G4String theName, G4int nProtons){
   theAnalysis  = this;
-
+  NPart = nProtons;
   theGenerator = PrimaryGeneratorAction::GetInstance();
   theDetector  = DetectorConstruction::GetInstance();
   f1 = new TFile(Form("%s_%.0f_%.1f_%d_%d.root",theName.data(),theGenerator->ENER,angle,thread,theGenerator->A),"recreate");
@@ -108,7 +108,6 @@ void Analysis::RearFrontDetector(G4Step* aStep, G4String theName)
     t->Fill();
 
     // Energy total in the middle
-
     //theSteppingAction->TotEnergyDeposit = 0;
     theSteppingAction->temp_name.clear();
     theSteppingAction->temp_X.clear();
@@ -116,16 +115,23 @@ void Analysis::RearFrontDetector(G4Step* aStep, G4String theName)
     theSteppingAction->temp_Z.clear();
     theSteppingAction->temp_E.clear();
     theSteppingAction->temp_Radlen.clear();
+
     aStep->GetTrack()->SetTrackStatus(fStopAndKill);
 
   }
 }
 void Analysis::Save(){
   f1->cd();
-  cout<<"Energy"<<theSteppingAction->TotEnergyDeposit*MeV<<endl;
-  cout<<"NPrimMiddle"<<theSteppingAction->NPrimMiddle<<endl;
-
-  theGenerator = PrimaryGeneratorAction::GetInstance();
   t->Write("",TObject::kOverwrite);
+  t2 = new TTree("header","H");
+  t2->Branch("NPart",&NPart,"NPart/I");
+  t2->Branch("NEnergyDeposit",&NEnergyDeposit,"NEnergyDeposit/I");
+  t2->Branch("TotEnergyDeposit",&TotEnergyDeposit,"TotEnergyDeposit/F");
+  t2->Branch("NPrimaryMiddle",&theSteppingAction->NPrimMiddle,"NPrimaryMiddle/I");
+  t2->Fill();
+  cout<<"Energy: "<<TotEnergyDeposit<<" [MeV] in "<<NEnergyDeposit<<" events"<<endl;
+  cout<<"S_MC: "<<TotEnergyDeposit/NEnergyDeposit<<endl;
+  cout<<"g_MC: "<<theSteppingAction->NPrimMiddle<<"/"<<NPart<<" ="<<float(theSteppingAction->NPrimMiddle)/float(NPart)<<endl;
+  t2->Write("",TObject::kOverwrite);
   f1->Close();
 }

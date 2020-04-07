@@ -38,6 +38,7 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
   G4int A;
   vector<G4double> beamPosZ;
   vector<G4double> beamPosY;
+  bool MiddleAlive;
   private:
   static PrimaryGeneratorAction* theGenerator;
   G4ParticleGun*  	       particleGun;  //pointer a to G4 service class
