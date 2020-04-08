@@ -57,7 +57,7 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
     temp_Radlen.push_back(tr->GetMaterial()->GetRadlen());
     temp_name.push_back(aStep->GetPreStepPoint()->GetMaterial()->GetName());
   }
-
+  /*
   if (tr->GetNextVolume()->GetName()=="physWorld" || tr->GetTrackID()!=1 ) {
       temp_X.clear();
       temp_Y.clear();
@@ -66,7 +66,7 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
       temp_Radlen.clear();
       temp_name.clear(); 
       tr->SetTrackStatus(fStopAndKill);}
-
+  */
 }
 
 
