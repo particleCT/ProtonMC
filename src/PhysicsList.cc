@@ -69,12 +69,12 @@ PhysicsList::PhysicsList(G4String& parWorldName):G4VModularPhysicsList(),pWorldN
   emPhysicsList = new G4EmStandardPhysics_option4();
   hadronPhys.push_back( new LocalIonIonInelasticPhysic());
   hadronPhys.push_back( new G4DecayPhysics());
-  //hadronPhys.push_back( new G4RadioactiveDecayPhysics());
   hadronPhys.push_back( new G4EmExtraPhysics());
   hadronPhys.push_back( new G4HadronElasticPhysics());
   hadronPhys.push_back( new G4HadronPhysicsQGSP_BIC());
   hadronPhys.push_back( new G4StoppingPhysics());
 
+  //hadronPhys.push_back( new G4RadioactiveDecayPhysics());
   //hadronPhys.push_back( new G4IonBinaryCascadePhysics());
   //hadronPhys.push_back( new G4IonQMDPhysics());
 

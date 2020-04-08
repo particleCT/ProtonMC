@@ -40,7 +40,7 @@ SteppingAction::SteppingAction()
 void SteppingAction::UserSteppingAction(const G4Step* aStep)
 {
   
-  G4Track *tr = aStep->GetTrack();
+  //G4Track *tr = aStep->GetTrack();
   G4ThreeVector preStepPos = aStep->GetPreStepPoint()->GetPosition();
   // Primary in the center
   if(abs(preStepPos.x()*mm)<1.0 && aStep->GetTrack()->GetTrackID()==1 && theGenerator->MiddleAlive==0){
@@ -48,15 +48,17 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
     NPrimMiddle++;
   }
 
-
-  if(tr->GetTrackID()==1){
+  if(aStep->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName()=="hadElastic"){
+    aStep->GetTrack()->SetCreatorProcess(aStep->GetPostStepPoint()->GetProcessDefinedStep());
+  }
+  /*if(tr->GetTrackID()==1){
     temp_X.push_back(preStepPos.x());
     temp_Y.push_back(preStepPos.y());
     temp_Z.push_back(preStepPos.z());
     temp_E.push_back(tr->GetKineticEnergy());
     temp_Radlen.push_back(tr->GetMaterial()->GetRadlen());
     temp_name.push_back(aStep->GetPreStepPoint()->GetMaterial()->GetName());
-  }
+    }*/
   /*
   if (tr->GetNextVolume()->GetName()=="physWorld" || tr->GetTrackID()!=1 ) {
       temp_X.clear();
