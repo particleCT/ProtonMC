@@ -54,42 +54,26 @@ NPart            = 0
 NPrimCylinderMiddle  = []
 TotEnergyDeposit =   []
 NPrimaryMiddle   =  []
+NPrimaryEnd   =  []
 NFinal = 0
 for entries in header:
     NPart           += entries.NPart
     NPrimCylinderMiddle.append(entries.NPrimaryCylinderMiddle)
     TotEnergyDeposit.append(entries.TotEnergyDeposit)
     NPrimaryMiddle.append(entries.NPrimaryMiddle)
+    NPrimaryEnd.append(entries.NPrimaryEnd)
 NPrimCylinderMiddle = np.array(NPrimCylinderMiddle)
 TotEnergyDeposit = np.array(TotEnergyDeposit)
 NPrimaryMiddle =  np.array(NPrimaryMiddle)
-"""
-phase = MC.Get("phase")
-NOther = 0
-NPrimary = 0
-NhadElastic = 0
 
-for event in phase:
-    if(event.part_name=="C12" and not event.proc_name=="hadElastic" and not event.proc_name=="primary"):
-        NOther +=1
-    if(event.part_name=="C12" and event.proc_name=="hadElastic"):
-        NhadElastic +=1
-    if(event.part_name=="C12" and event.proc_name=="primary"):
-        NPrimary +=1        
-
-NFinal = NOther + NhadElastic + NPrimary
-"""
 try:    
     print "S_MC ", np.mean(TotEnergyDeposit/NPrimCylinderMiddle), "+/-", np.std(TotEnergyDeposit/NPrimCylinderMiddle)
+
 except:
     print "No data for S_MC"
-"""
-try:
-    print "gMC: ", NFinal, "/", NPrimaryMiddle, " = ",float(NFinal)/float(NPrimaryMiddle)
-    print "Full attenuation: ", NFinal,"/",NPart," = ",float(NFinal)/float(NPart)
-    print "NPrimary: ", NPrimary,"/",NPart," = ",float(NPrimary)/float(NPart)
-    print "NhadElastic: ", NhadElastic,"/",NPart," = ",float(NhadElastic)/float(NPart)
-    print "NOther: ", NOther,"/",NPart," = ",float(NOther)/float(NPart)    
+
+try:    
+    print "g_MC ", np.mean(NPrimaryMiddle/NPrimaryEnd), "+/-", np.std(NPrimaryMiddle/NPrimaryEnd)
 except:
-    print "No data for gMC"
-"""
+    print "No data for g_MC"    
+
