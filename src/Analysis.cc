@@ -106,6 +106,8 @@ void Analysis::RearFrontDetector(G4Step* aStep, G4String theName)
     else proc_name  = "primary";
     part_name  = aStep->GetTrack()->GetDynamicParticle()->GetDefinition()->GetParticleName();
     t->Fill();
+    //if(part_name==theGenerator->particle->GetParticleName()) NPrimEnd++;
+    if(Id==1) NPrimEnd++;
 
     // Energy total in the middle
     //theSteppingAction->TotEnergyDeposit = 0;
@@ -127,11 +129,13 @@ void Analysis::Save(){
   t2->Branch("NPart",&NPart,"NPart/I");
   t2->Branch("NEnergyDeposit",&NEnergyDeposit,"NEnergyDeposit/I");
   t2->Branch("TotEnergyDeposit",&TotEnergyDeposit,"TotEnergyDeposit/F");
-  t2->Branch("NPrimaryMiddle",&theSteppingAction->NPrimMiddle,"NPrimaryMiddle/I");
+  t2->Branch("NPrimaryMiddle",&NPrimMiddle,"NPrimaryMiddle/I");
+  t2->Branch("NPrimaryCylinderMiddle",&NPrimCylinderMiddle,"NPrimaryCylinderMiddle/I");
+  t2->Branch("NPrimaryEnd",&NPrimEnd,"NPrimaryEnd/I");
   t2->Fill();
-  cout<<"Energy: "<<TotEnergyDeposit<<" [MeV] in "<<NEnergyDeposit<<" events"<<endl;
-  cout<<"S_MC: "<<TotEnergyDeposit/NEnergyDeposit<<endl;
-  cout<<"g_MC: "<<theSteppingAction->NPrimMiddle<<"/"<<NPart<<" ="<<float(theSteppingAction->NPrimMiddle)/float(NPart)<<endl;
+  cout<<"Energy: "<<TotEnergyDeposit<<" [MeV] in "<<NPrimCylinderMiddle<<" events"<<endl;
+  cout<<"S_MC: "<<TotEnergyDeposit/float(NPrimCylinderMiddle)<<endl;
+  cout<<"g_MC: "<<NPrimMiddle<<"/"<<NPrimEnd<<" ="<<float(NPrimMiddle)/float(NPrimEnd)<<endl;
   t2->Write("",TObject::kOverwrite);
   f1->Close();
 }

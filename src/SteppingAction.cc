@@ -32,25 +32,31 @@ SteppingAction::~SteppingAction()
 {theSteppingAction=NULL;}
 SteppingAction::SteppingAction()
 {
-  theAnalysis  = Analysis::GetInstance();
   theGenerator = PrimaryGeneratorAction::GetInstance();
   theSteppingAction=this;
+  theAnalysis  = Analysis::GetInstance();
 }
 
 void SteppingAction::UserSteppingAction(const G4Step* aStep)
 {
-  
   //G4Track *tr = aStep->GetTrack();
   G4ThreeVector preStepPos = aStep->GetPreStepPoint()->GetPosition();
   // Primary in the center
-  if(abs(preStepPos.x()*mm)<1.0 && aStep->GetTrack()->GetTrackID()==1 && theGenerator->MiddleAlive==0){
-    theGenerator->MiddleAlive=1;
-    NPrimMiddle++;
-  }
 
+  if(abs(preStepPos.x()*mm)<1.0 && aStep->GetTrack()->GetTrackID()==1 && theGenerator->MiddleAlive==0){ // Prevent backscattering
+    theGenerator->MiddleAlive=1;    
+    theAnalysis->NPrimMiddle += 1;
+  }
+  if(abs(preStepPos.x()*mm)<1.0 && abs(preStepPos.y()*mm)<1.0 && abs(preStepPos.z()*mm)<1.0){
+    theAnalysis->TotEnergyDeposit += aStep->GetTotalEnergyDeposit();
+    if(aStep->GetTrack()->GetTrackID()==1){
+      theAnalysis->NPrimCylinderMiddle += 1;
+    }
+  }
   if(aStep->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName()=="hadElastic"){
     aStep->GetTrack()->SetCreatorProcess(aStep->GetPostStepPoint()->GetProcessDefinedStep());
   }
+
   /*if(tr->GetTrackID()==1){
     temp_X.push_back(preStepPos.x());
     temp_Y.push_back(preStepPos.y());

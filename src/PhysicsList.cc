@@ -73,9 +73,9 @@ PhysicsList::PhysicsList(G4String& parWorldName):G4VModularPhysicsList(),pWorldN
   hadronPhys.push_back( new G4HadronElasticPhysics());
   hadronPhys.push_back( new G4HadronPhysicsQGSP_BIC());
   hadronPhys.push_back( new G4StoppingPhysics());
-
-  //hadronPhys.push_back( new G4RadioactiveDecayPhysics());
   //hadronPhys.push_back( new G4IonBinaryCascadePhysics());
+  //hadronPhys.push_back( new G4RadioactiveDecayPhysics());
+  
   //hadronPhys.push_back( new G4IonQMDPhysics());
 
   //AddPhysicsList("standard_opt4");
@@ -90,8 +90,7 @@ PhysicsList::PhysicsList(G4String& parWorldName):G4VModularPhysicsList(),pWorldN
   // Decay physics and all particles
   decPhysicsList = new G4DecayPhysics();
   //emName = G4String("emstandard_opt3");
-  
-  
+    
   //AddPhysicsList("binary_ion");
   //AddPhysicsList("qmd_ion_ion_inelastic");
   //AddPhysicsList("standard_opt3");
@@ -158,7 +157,7 @@ void PhysicsList::ConstructProcess()
 
   // step limitation (as a full process)
   //
-  AddStepMax();
+  //  AddStepMax();
 }
 /////////////////////////////////////////////////////////////////////////////
 void PhysicsList::AddParallelWorldProcess() {

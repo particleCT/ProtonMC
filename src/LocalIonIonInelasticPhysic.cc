@@ -100,25 +100,24 @@ void LocalIonIonInelasticPhysic::ConstructProcess()
   G4TripathiLightCrossSectionModFH* TripatiLightCrossSectionsModFH = new G4TripathiLightCrossSectionModFH;
   G4IonsShenCrossSection* ShenCrossSections = new G4IonsShenCrossSection;
 
-
   // ****************
   // *** Proton ***
   // ****************
-  /*
-  G4ProtonInelasticProcess* protonInelasticProcess = new G4ProtonInelasticProcess;
+  
+  //G4ProtonInelasticProcess* protonInelasticProcess = new G4ProtonInelasticProcess;
   
   //protonInelasticProcess -> AddDataSet(ShenCrossSections);
-  protonInelasticProcess -> AddDataSet(TripatiCrossSections);
+  //protonInelasticProcess -> AddDataSet(TripatiCrossSections);
   //protonInelasticProcess -> AddDataSet(TripatiLightCrossSectionsModFH);
 
   //protonInelasticProcess -> RegisterMe(ligthBinary);
-  protonInelasticProcess -> RegisterMe(JQMDmodel);
+  //protonInelasticProcess -> RegisterMe(JQMDmodel);
   //protonInelasticProcess -> RegisterMe(WilsonModel);
 
-  particle = G4Proton::Proton();
-  processManager = particle -> GetProcessManager();
-  processManager -> AddDiscreteProcess(protonInelasticProcess);
-  */
+  //particle = G4Proton::Proton();
+  //processManager = particle -> GetProcessManager();
+  //processManager -> AddDiscreteProcess(protonInelasticProcess);
+  
   // ****************
   // *** Deuteron ***
   // ****************
@@ -161,7 +160,8 @@ void LocalIonIonInelasticPhysic::ConstructProcess()
   //alphaInelasticProcess -> AddDataSet(ShenCrossSections);
   alphaInelasticProcess -> AddDataSet(TripatiCrossSections);
   alphaInelasticProcess -> AddDataSet(TripatiLightCrossSectionsModFH);
-
+  //alphaInelasticProcess -> AddDataSet(TripatiLightCrossSections);
+  
   alphaInelasticProcess -> RegisterMe(ligthBinary);
  //alphaInelasticProcess -> RegisterMe(JQMDmodel);
  //alphaIonInelasticProcess -> RegisterMe(WilsonModel);

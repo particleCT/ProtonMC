@@ -88,10 +88,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   rad_log2->SetVisAttributes(sd_att);
   rad_log2->SetSensitiveDetector(sd2);
   new G4PVPlacement(0,G4ThreeVector(theDetector->PhantomHalfX + 1*mm,0,0),"rad_phys2",rad_log2,physWorld,false,0);// 2.0 mm thick so the edge fit with the box edge
-  
-
-
-  
+    
   // Container box      
   G4Box* box_vol = new G4Box("box_vol",PhantomHalfX,PhantomHalfY,PhantomHalfZ);
   G4LogicalVolume* box_log  = new G4LogicalVolume(box_vol, theWorldMaterial,"box_log");
@@ -103,8 +100,8 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
   /*G4Region* box_phys_region = new G4Region("box_phys_region");
   box_phys_region->AddRootLogicalVolume(box_log);
-  box_phys_region->SetUserLimits(new G4UserLimits(0.5*mm));
-  */
+  box_phys_region->SetUserLimits(new G4UserLimits(0.5*mm));*/
+  
   //----------------------------------------------------------------------------------------------------------------
   // Water Cylinder phantom
   //----------------------------------------------------------------------------------------------------------------

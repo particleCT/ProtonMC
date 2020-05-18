@@ -36,6 +36,9 @@ public:
   G4float  TotEnergyDeposit = 0.;
   G4int    NEnergyDeposit =0;
   G4int    NPart;
+  G4int NPrimEnd=0;
+  G4int NPrimMiddle=0;
+  G4int NPrimCylinderMiddle=0;
 private:
 
   static Analysis* theAnalysis;

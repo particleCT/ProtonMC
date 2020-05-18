@@ -53,12 +53,13 @@ int main(int argc,char** argv) {
   //G4ExceptionHandler* handler = new G4ExceptionHandler();
   runManager->SetUserInitialization(new PhysicsList(paraWorldName));
   DetectorConstruction* myDC = new DetectorConstruction(Model,angle,thick);
-
   PrimaryGeneratorAction *theGenerator =  new PrimaryGeneratorAction(Energy,ANumber);
+  Analysis* theAnalysis = new Analysis(thread,angle,Model, nProtons);
+  
   runManager->SetUserAction(theGenerator); 
   runManager->SetUserAction( new SteppingAction() );
   runManager->SetUserInitialization( myDC );
-  Analysis* theAnalysis    = new Analysis(thread,angle,Model, nProtons);
+
 
   runManager->SetVerboseLevel(0);
   runManager->Initialize();
@@ -87,7 +88,7 @@ int main(int argc,char** argv) {
 
   runManager->BeamOn( nProtons );  
   theAnalysis->Save();
-  calcRSP(theGenerator);
+  //calcRSP(theGenerator);
   calcStoppingPower(theGenerator);
   //delete visManager;
   return 0;

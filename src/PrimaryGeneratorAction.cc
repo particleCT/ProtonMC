@@ -37,6 +37,13 @@ PrimaryGeneratorAction::PrimaryGeneratorAction(G4double energy, G4int ANumber):E
   IrradiatedEnergy  = 0.;
   fieldSizeY = 2*(theDetector->PhantomHalfY);
   fieldSizeZ = 2*(theDetector->PhantomHalfZ);
+
+  if(A==1) particle = G4Proton::Proton();//G4IonTable::GetIonTable()->GetIon(1,1,0); // proton
+  else if(A==2) particle = G4Deuteron::Deuteron();
+  else if(A==4) particle = G4Alpha::Alpha();
+  else particle = G4IonTable::GetIonTable()->GetIon(int(A/2),A,0); // rest
+
+
 }
 
 PrimaryGeneratorAction::~PrimaryGeneratorAction()
@@ -47,11 +54,6 @@ PrimaryGeneratorAction::~PrimaryGeneratorAction()
 
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
-  if(A==1) particle = G4Proton::Proton();//G4IonTable::GetIonTable()->GetIon(1,1,0); // proton
-  else if(A==2) particle = G4Deuteron::Deuteron();
-  else if(A==4) particle = G4Alpha::Alpha();
-  else particle = G4IonTable::GetIonTable()->GetIon(int(A/2),A,0); // rest
-
   MiddleAlive = 0;
   particleGun->SetParticleDefinition(particle);
   Einit = ENER*A*MeV;
@@ -64,8 +66,8 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   pz0 = 0;//cosTheta;
 
   x0 = -1*theDetector->PhantomHalfX -0.01*mm; 
-  y0 = G4UniformRand()*fieldSizeY-fieldSizeY/2;
-  z0 = G4UniformRand()*fieldSizeZ-fieldSizeZ/2; 
+  y0 = (G4UniformRand()*5 - 2.5)*cm;//fieldSizeY-fieldSizeY/2;
+  z0 = (G4UniformRand()*5 - 2.5)*cm;//fieldSizeZ-fieldSizeZ/2; 
 
   Position = G4ThreeVector(x0,y0,z0); 
   Momentum = G4ThreeVector(px0,py0,pz0);
